@@ -1,3 +1,0 @@
-`clear <int>`: purges that amount of channel history
-`kick <mention>`: kicks someone mean
-`ban <mention>`: bans someone mean
