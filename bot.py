@@ -1,26 +1,25 @@
 import discord
 import random
 import csv
-import subprocess
 import time
-from typing import Optional
+import pathlib
 
 from discord.ext import commands
 
-path = "/home/pi/valkyrie_autopilot/"
-with open(path + 'prefix.txt', 'r') as file:
+path = pathlib.PurePath()
+with open(path / 'system/prefix.txt', 'r') as file:
     prefix = file.read()
-with open(path + 'token.txt', 'r') as file:
+with open(path / 'system/token.txt', 'r') as file:
     TOKEN = file.read()
 intents = discord.Intents().all()
 valkyriebot = commands.Bot(command_prefix=prefix, case_insensitive=True, intents=intents)
 
 
-with open(path + 'embedtexts/helpfun.txt', 'r') as file:
+with open(path / 'embedtexts/helpfun.txt', 'r') as file:
     helpfun = file.read()
-with open(path + 'embedtexts/helputility.txt', 'r') as file:
+with open(path / 'embedtexts/helputility.txt', 'r') as file:
     helputility = file.read()
-with open(path + 'embedtexts/helpmod.txt', 'r') as file:
+with open(path / 'embedtexts/helpmod.txt', 'r') as file:
     helpmod = file.read()
 crystalball = ["Yes", "No", "Perhaps", "Maybe", "It Is Certain", "Impossible"]
 embedcolor = 0xFD6A02
@@ -34,18 +33,6 @@ async def on_ready():
     await valkyriebot.change_presence(
         activity=discord.Game(name=prefix + f"please for a command list, Bot by valkyrie_pilot and superpowers04, running on {valkyriebot.user.name}"))
 
-
-@valkyriebot.event
-async def on_message(message):
-    #logs
-    print(f"In server: {message.guild} In channel: {message.channel} user: {message.author} said: {message.content}")
-    await valkyriebot.process_commands(message)
-
-@valkyriebot.event
-async def on_message_edit(message_before, message):
-    #logs
-    print(f"In server: {message.guild} In channel: {message.channel} user: {message.author} edited their message from: {message_before.content} to: {message.content}")
-    await valkyriebot.process_commands(message)
 
 @valkyriebot.event
 async def on_command_error(ctx, error):
