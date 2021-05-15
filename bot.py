@@ -120,6 +120,25 @@ async def ping(ctx):
     await ctx.send(embed=embed)
 
 
+@commands.command()
+@commands.has_permissions(administrator=True)  # requires that the person issuing the command has administrator perms
+async def prefix(ctx, newprefix):  # context and what we should set the new prefix to
+    """Sets the bot prefix for this server"""
+    serverid = ctx.guild.id  # gets serverid for convinience
+    db = await aiosqlite.connect(path / 'system/data.db')  # connect to our server data db
+    dataline = await db.execute(
+        f'''SELECT prefix FROM prefixes WHERE serverid = {serverid}''')  # get the current prefix for that server, if it exists
+    if await dataline.fetchone() is not None:  # actually check if it exists
+        await db.execute("""UPDATE prefixes SET prefix = ? WHERE serverid = ?""",
+                         (newprefix, serverid))  # update prefix
+    else:
+        await db.execute("INSERT INTO prefixes(serverid, prefix) VALUES (?,?)",
+                         (serverid, newprefix))  # set new prefix
+    await db.commit()  # say "yes i want to do this for sure"
+    await db.close()  # close connection
+    await ctx.send(f"Prefix set to {newprefix}")  # tell admin what happened
+
+
 @sylveon.command()
 async def hug(ctx, *, member: discord.Member):
     if member is not None:
@@ -143,5 +162,60 @@ async def cuddle(ctx, member: discord.Member = None):
         await ctx.send(f"{member.mention}, {ctx.author.mention} gave you a cuddle, aww!")
     await ctx.send("https://media.tenor.com/images/9a8b0edf260a4831271c4a83573a1e12/tenor.gif")
 
+
+@sylveon.event
+async def on_command_error(ctx, error):
+    if hasattr(ctx.command, 'on_error'):
+        # await ctx.message.add_reaction('<:CommandError:804193351758381086>')
+        return
+
+    elif isinstance(error, discord.ext.commands.errors.CommandNotFound) or ctx.command.hidden:
+        return
+
+    elif isinstance(error, discord.ext.commands.errors.NotOwner):
+        await ctx.reply("lol only valk can do that")
+        return
+
+    elif isinstance(error, discord.ext.commands.errors.MissingPermissions):
+        await ctx.reply("You are not allowed to do that!")
+        return
+
+    elif isinstance(error, discord.ext.commands.errors.BotMissingPermissions):
+        await ctx.reply("I do not have the requisite permissions to do that!")
+        return
+
+    elif isinstance(error, discord.ext.commands.errors.MissingRole):
+        await ctx.send("I am missing the role to do that!")
+        return
+
+    elif isinstance(error, discord.ext.commands.errors.CommandOnCooldown):
+        if str(error.cooldown.type.name) != "default":
+            cooldowntype = f'per {error.cooldown.type.name}'
+
+        else:
+            cooldowntype = 'global'
+        await ctx.reply(
+            f"This command is on a {round(error.cooldown.per, 0)} second {cooldowntype} cooldown.\n"
+            f"Wait {round(error.retry_after, 1)} seconds, and try again.",
+            delete_after=min(10, error.retry_after))
+        return
+
+    elif isinstance(error, error.MissingRequiredArgument):
+        await ctx.reply(f"Missing required argument!\nUsage:`{ctx.command.signature}`", delete_after=30)
+        return
+
+    elif isinstance(error, error.BadArgument):
+        await ctx.reply(f"Invalid argument!\nUsage:`{ctx.command.signature}`", delete_after=30)
+        return
+
+    elif isinstance(error, error.NoPrivateMessage):
+        await ctx.reply("That can only be used in servers, not DMs!")
+        return
+
+    else:
+        # Send user a message
+        await ctx.send("Error:\n```" + str(
+            error) + "```\nvalkyrie_pilot will be informed.  Most likley this is a bug, but check your syntax.",
+                       delete_after=60)
 
 sylveon.run(TOKEN)
