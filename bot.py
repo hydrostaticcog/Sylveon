@@ -1,4 +1,4 @@
-#!/home/gxut/Sylveon/venv/bin/python3
+#!/home/gxhut/Sylveon/venv/bin/python3
 import pathlib
 import random
 import aiosqlite
