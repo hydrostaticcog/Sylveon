@@ -1,0 +1,5 @@
+#!/bin/bash
+pkill -f '/home/gxhut/Sylveon/venv/bin/python3 ./bot.py'
+git pull
+chmod +x ./bot.py
+./bot.py

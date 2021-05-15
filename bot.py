@@ -1,6 +1,6 @@
+#!/home/gxut/Sylveon/venv/bin/python3
 import pathlib
 import random
-
 import aiosqlite
 import discord
 from discord.ext import commands
