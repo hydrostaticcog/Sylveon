@@ -9,7 +9,7 @@ path = pathlib.PurePath()
 
 
 async def prefixgetter(_, message):
-    default_prefix = "%"
+    default_prefix = "&"
     try:
         sid = message.guild.id
     except AttributeError:
