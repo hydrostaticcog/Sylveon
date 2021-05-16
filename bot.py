@@ -127,7 +127,8 @@ async def prefix(ctx, newprefix):  # context and what we should set the new pref
     serverid = ctx.guild.id  # gets serverid for convinience
     db = await aiosqlite.connect(path / 'system/data.db')  # connect to our server data db
     dataline = await db.execute(
-        f'''SELECT prefix FROM prefixes WHERE serverid = {serverid}''')  # get the current prefix for that server, if it exists
+        f'''SELECT prefix FROM prefixes WHERE serverid = {serverid}''')  # get the current prefix for that server,
+    # if it exists
     if await dataline.fetchone() is not None:  # actually check if it exists
         await db.execute("""UPDATE prefixes SET prefix = ? WHERE serverid = ?""",
                          (newprefix, serverid))  # update prefix
@@ -200,15 +201,15 @@ async def on_command_error(ctx, error):
             delete_after=min(10, error.retry_after))
         return
 
-    elif isinstance(error, error.MissingRequiredArgument):
+    elif isinstance(error, discord.ext.commands.errors.MissingRequiredArgument):
         await ctx.reply(f"Missing required argument!\nUsage:`{ctx.command.signature}`", delete_after=30)
         return
 
-    elif isinstance(error, error.BadArgument):
+    elif isinstance(error, discord.ext.commands.errors.BadArgument):
         await ctx.reply(f"Invalid argument!\nUsage:`{ctx.command.signature}`", delete_after=30)
         return
 
-    elif isinstance(error, error.NoPrivateMessage):
+    elif isinstance(error, discord.ext.commands.errors.NoPrivateMessage):
         await ctx.reply("That can only be used in servers, not DMs!")
         return
 
