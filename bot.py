@@ -120,7 +120,7 @@ async def ping(ctx):
     await ctx.send(embed=embed)
 
 
-@commands.command()
+@sylveon.command()
 @commands.has_permissions(administrator=True)  # requires that the person issuing the command has administrator perms
 async def prefix(ctx, newprefix):  # context and what we should set the new prefix to
     """Sets the bot prefix for this server"""
