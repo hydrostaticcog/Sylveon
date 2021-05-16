@@ -3,4 +3,5 @@ pkill -f '/home/gxhut/Sylveon/venv/bin/python3 ./bot.py'
 git pull
 ./venv/bin/python3 -m pip install -r requirements.txt
 chmod +x ./bot.py
-./bot.py
+./bot.py &
+disown %1
