@@ -1,6 +1,7 @@
 #!/home/gxhut/Sylveon/venv/bin/python3
 import pathlib
 import random
+
 import aiosqlite
 import discord
 from discord.ext import commands
@@ -218,5 +219,6 @@ async def on_command_error(ctx, error):
         await ctx.send("Error:\n```" + str(
             error) + "```\nvalkyrie_pilot will be informed.  Most likley this is a bug, but check your syntax.",
                        delete_after=60)
+
 
 sylveon.run(TOKEN)
