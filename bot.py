@@ -141,11 +141,11 @@ async def prefix(ctx, newprefix):  # context and what we should set the new pref
 
 
 @sylveon.command()
-async def hug(ctx, *, member: discord.Member):
+async def hug(ctx, *, member: discord.Member=None):
     if member is not None:
         mention = member.mention
-    else:
-        mention = ":o"
+    elif ctx.message.mention_everyone:
+        mention = "@everyone"
     await ctx.send(f"{mention}, {ctx.author.mention} gave you a hug, aww!")
     hugs = ["https://media.tenor.com/images/50c2f13c590fdb27c087d6a6736218e0/tenor.gif",
             "https://media.discordapp.net/attachments/731763704005394523/829133807008743444/image0.gif", 
