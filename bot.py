@@ -147,7 +147,10 @@ async def hug(ctx, *, member: discord.Member):
     else:
         mention = ":o"
     await ctx.send(f"{mention}, {ctx.author.mention} gave you a hug, aww!")
-    await ctx.send("https://media.tenor.com/images/50c2f13c590fdb27c087d6a6736218e0/tenor.gif")
+    hugs = ["https://media.tenor.com/images/50c2f13c590fdb27c087d6a6736218e0/tenor.gif",
+            "https://media.discordapp.net/attachments/731763704005394523/829133807008743444/image0.gif", 
+            "https://media1.tenor.com/images/969f0f462e4b7350da543f0231ba94cb/tenor.gif"]
+    await ctx.send(random.choice(hugs))
 
 
 @sylveon.command()
