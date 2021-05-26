@@ -142,15 +142,23 @@ async def prefix(ctx, newprefix):  # context and what we should set the new pref
 
 
 @sylveon.command()
-async def hug(ctx, *, member: discord.Member=None):
-    if member is not None:
-        mention = member.mention
+async def hug(ctx, members: commands.Greedy[discord.Member] = None):
+    await ctx.message.delete()
+    mentions = []
+    if members:
+        for person in members:
+            mentions.append(person.mention)
+        mentions = " ".join(mentions)
     elif ctx.message.mention_everyone:
-        mention = "@everyone"
-    await ctx.send(f"{mention}, {ctx.author.mention} gave you a hug, aww!")
+        mentions = "@everyone"
+    else:
+        mentions = " :D"
+    await ctx.send(f"{mentions}, {ctx.author.mention} gave you a hug, aww!")
     hugs = ["https://media.tenor.com/images/50c2f13c590fdb27c087d6a6736218e0/tenor.gif",
             "https://media.discordapp.net/attachments/731763704005394523/829133807008743444/image0.gif", 
-            "https://media1.tenor.com/images/969f0f462e4b7350da543f0231ba94cb/tenor.gif"]
+            "https://media1.tenor.com/images/969f0f462e4b7350da543f0231ba94cb/tenor.gif",
+            "https://media1.tenor.com/images/b7492c8996b25e613a2ab58a5d801924/tenor.gif?itemid=14227401",
+            "https://media1.tenor.com/images/24ac13447f9409d41c1aecb923aedf81/tenor.gif?itemid=5026057"]
     await ctx.send(random.choice(hugs))
 
 
