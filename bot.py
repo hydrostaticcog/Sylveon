@@ -143,7 +143,6 @@ async def prefix(ctx, newprefix):  # context and what we should set the new pref
 
 @sylveon.command()
 async def hug(ctx, members: commands.Greedy[discord.Member] = None):
-    await ctx.message.delete()
     mentions = []
     if members:
         for person in members:
