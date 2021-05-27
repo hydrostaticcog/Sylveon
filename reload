@@ -1,7 +1,7 @@
 #!/bin/bash
-pkill -f '/home/gxhut/Sylveon/venv/bin/python3 ./bot.py'
 git pull
 ./venv/bin/python3 -m pip install -r requirements.txt
 chmod +x ./bot.py
+pkill -f '/home/gxhut/Sylveon/venv/bin/python3 ./bot.py'
 ./bot.py &
 disown %1
