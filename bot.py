@@ -72,9 +72,11 @@ async def on_message(message):
     bot_mention_len = len(bot_mention_str)
     if message.content[:bot_mention_len] == bot_mention_str:
         message.content = await prefixgetter(sylveon, message) + message.content[bot_mention_len:]
-        await sylveon.process_commands(message)
+        ctx = await sylveon.get_context(message)
+        await sylveon.invoke(ctx)
     else:
-        await sylveon.process_commands(message)
+        ctx = await sylveon.get_context(message)
+        await sylveon.invoke(ctx)
 
 
 @sylveon.command()
