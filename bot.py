@@ -145,6 +145,7 @@ async def prefix(ctx, newprefix):  # context and what we should set the new pref
 
 @sylveon.command()
 async def hug(ctx, members: commands.Greedy[discord.Member] = None, *, reason="aww!"):
+    sent = False
     mentions = []
     if members:
         for person in members:
@@ -157,7 +158,10 @@ async def hug(ctx, members: commands.Greedy[discord.Member] = None, *, reason="a
         mentions = " :D"
     for person in members:
         if person.id == 808149899182342145:
+            await ctx.send("But that's Glaceon!")
             await ctx.send("https://tenor.com/view/anime-blush-girl-gif-19459906")
+            sent = True
+    if not sent:
         await ctx.send(f"{mentions}, {ctx.author.mention} gave you a hug, {reason}")
         hugs = ["https://media.tenor.com/images/50c2f13c590fdb27c087d6a6736218e0/tenor.gif",
                 "https://media.discordapp.net/attachments/731763704005394523/829133807008743444/image0.gif",
