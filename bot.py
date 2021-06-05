@@ -1,6 +1,7 @@
 #!/home/gxhut/Sylveon/venv/bin/python3
 import pathlib
 import random
+import traceback
 
 import aiosqlite
 import discord
@@ -224,9 +225,22 @@ async def on_command_error(ctx, error):
 
     else:
         # Send user a message
-        await ctx.send("Error:\n```" + str(
-            error) + "```\nvalkyrie_pilot will be informed.  Most likley this is a bug, but check your syntax.",
-                       delete_after=60)
+        # get data from exception
+        etype = type(error)
+        trace = error.__traceback__
+
+        # 'traceback' is the stdlib module, `import traceback`.
+        lines = traceback.format_exception(etype, error, trace)
+
+        # format_exception returns a list with line breaks embedded in the lines, so let's just stitch the elements together
+        traceback_text = ''.join(lines)
+
+        # now we can send it to the user
+        bug_channel = sylveon.get_channel(845453425722261515)
+        await bug_channel.send("```\n" + str(traceback_text) + "\n```\n Command being invoked: " + ctx.command.name)
+        await ctx.send("Error!\n```" + str(
+            error) + "```\nvalkyrie_pilot will be informed.  Most likely this is a bug, but check your syntax.",
+                       delete_after=30)
 
 
 sylveon.run(TOKEN)
