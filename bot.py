@@ -52,7 +52,9 @@ class Help(commands.MinimalHelpCommand):
 with open(path / 'system/token.txt', 'r') as file:
     TOKEN = file.read()
 intents = discord.Intents().all()
-sylveon = commands.Bot(command_prefix=prefixgetter, case_insensitive=True, intents=intents)
+sylveon = commands.Bot(command_prefix=prefixgetter, case_insensitive=True, intents=intents,
+                       activity=discord.Activity(activity=discord.Game(
+                           name=f"with friends!")))
 crystalball = ["Yes", "No", "Perhaps", "Maybe", "It Is Certain", "Impossible"]
 embedcolor = 0xFD6A02
 
@@ -64,7 +66,7 @@ async def on_ready():
     print(f'Logged on as {sylveon.user.name}, prefix: prefixgetter(sylveon, guild)')
     await sylveon.change_presence(
         activity=discord.Game(
-            name=f"The Fun Eeveeloutions bot!"))
+            name=f"with friends!"))
 
 
 @sylveon.event
@@ -150,18 +152,18 @@ async def hug(ctx, members: commands.Greedy[discord.Member] = None, *, reason="a
     mentions = []
     if members:
         for person in members:
+            if person.id == 808149899182342145:
+                await ctx.send("But that's Glaceon!")
+                await ctx.send("https://tenor.com/view/anime-blush-girl-gif-19459906")
+                sent = True
+        for person in members:
             mentions.append(person.mention)
         mentions = " ".join(mentions)
     elif ctx.message.mention_everyone:
         mentions = "@everyone"
-        reason = reason.replace("@everyone","")
+        reason = reason.replace("@everyone", "")
     else:
         mentions = " :D"
-    for person in members:
-        if person.id == 808149899182342145:
-            await ctx.send("But that's Glaceon!")
-            await ctx.send("https://tenor.com/view/anime-blush-girl-gif-19459906")
-            sent = True
     if not sent:
         await ctx.send(f"{mentions}, {ctx.author.mention} gave you a hug, {reason}")
         hugs = ["https://media.tenor.com/images/50c2f13c590fdb27c087d6a6736218e0/tenor.gif",
