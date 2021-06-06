@@ -1,5 +1,6 @@
 #!/bin/bash
-source ./bin/activate
+cd ~/Sylveon
+source ./venv/bin/activate
 git pull
 ./venv/bin/python3 -m pip install -r requirements.txt
 chmod +x ./bot.py
