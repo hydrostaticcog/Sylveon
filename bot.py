@@ -49,7 +49,7 @@ class Help(commands.MinimalHelpCommand):
         await channel.send(embed=embed)
 
 
-with open(path / 'token.txt', 'r') as file:
+with open(path / 'system/token.txt', 'r') as file:
     TOKEN = file.read()
 intents = discord.Intents().all()
 sylveon = commands.Bot(command_prefix=prefixgetter, case_insensitive=True, intents=intents,
