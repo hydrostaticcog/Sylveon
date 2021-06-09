@@ -161,7 +161,7 @@ async def hug(ctx, members: commands.Greedy[discord.Member] = None, *, reason="a
         mentions = " ".join(mentions)
     elif ctx.message.mention_everyone:
         mentions = "@everyone"
-        reason = reason.replace("@everyone", "")
+        reason = reason.replace("@everyone", "aww")
     else:
         mentions = " :D"
     if not sent:
