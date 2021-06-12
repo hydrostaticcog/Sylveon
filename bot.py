@@ -194,7 +194,7 @@ async def snuggle(ctx, members: commands.Greedy[discord.Member] = None, *, reaso
     else:
         mentions = " :D"
     if not sent:
-        await ctx.send(f"{mentions}, {ctx.author.mention} gave you a hug, {reason}")
+        await ctx.send(f"{mentions}, {ctx.author.mention} gave you a snuggle, {reason}")
         snuggles = ["https://tenor.com/view/rosy-cheeks-mochi-peach-mochi-cat-cute-kitty-peach-cat-gif-16992602"]
         await ctx.send(random.choice(snuggles))
 
