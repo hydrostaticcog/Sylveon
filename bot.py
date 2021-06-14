@@ -1,4 +1,4 @@
-#!/home/gxhut/Sylveon/venv/bin/python3
+#!/home/Glaceon/Sylveon/venv/bin/python3
 import pathlib
 import random
 import traceback
