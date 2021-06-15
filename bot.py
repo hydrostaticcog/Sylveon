@@ -175,6 +175,32 @@ async def hug(ctx, members: commands.Greedy[discord.Member] = None, *, reason="a
         await ctx.send(random.choice(hugs))
 
 
+@sylveon.command()
+async def snuggle(ctx, members: commands.Greedy[discord.Member] = None, *, reason="aww!"):
+    sent = False
+    mentions = []
+    if members:
+        for person in members:
+            if person.id == 808149899182342145:
+                await ctx.send("But that's Glaceon!")
+                await ctx.send("https://tenor.com/view/anime-blush-girl-gif-19459906")
+                sent = True
+        for person in members:
+            mentions.append(person.mention)
+        mentions = " ".join(mentions)
+    elif ctx.message.mention_everyone:
+        mentions = "@everyone"
+        reason = reason.replace("@everyone", "aww")
+    else:
+        mentions = " :D"
+    if not sent:
+        await ctx.send(f"{mentions}, {ctx.author.mention} gave you a snuggle, {reason}")
+        snuggles = ["https://tenor.com/view/rosy-cheeks-mochi-peach-mochi-cat-cute-kitty-peach-cat-gif-16992602",
+                    "https://tenor.com/view/pats-cute-cats-love-gif-13979931",
+                    "https://tenor.com/view/gif-fofinho-heart-love-cuddle-cute-gif-14676815"]
+        await ctx.send(random.choice(snuggles))
+
+
 @sylveon.event
 async def on_command_error(ctx, error):
     if hasattr(ctx.command, 'on_error'):
