@@ -1,9 +1,0 @@
-#!/bin/bash
-cd ~/Sylveon
-source ./venv/bin/activate
-git pull
-./venv/bin/python3 -m pip install -r requirements.txt
-chmod +x ./bot.py
-pkill -f '/home/Glaceon/Sylveon/venv/bin/python3 ./bot.py'
-./bot.py &
-disown %1
