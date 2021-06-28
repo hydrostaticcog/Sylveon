@@ -178,7 +178,7 @@ async def snuggle(ctx, members: commands.Greedy[discord.Member] = None, *, reaso
 
         
 @sylveon.command(aliases=['safe', 'lifeline', 'prevention', 'suicideprevention', 'suicidepreventionhotline'])
-async def suicide(ctx, members: commands.Greedy[discord.Member] = None)
+async def suicide(ctx, members: commands.Greedy[discord.Member] = None):
     for member in members:
         member_direct_message = await member.create_dm()
         await member_direct_message.send(f"""
