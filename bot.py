@@ -1,4 +1,4 @@
-#!/home/Glaceon/Sylveon/venv/bin/python3
+#!/usr/bin/env python3
 import pathlib
 import random
 import traceback
@@ -54,20 +54,9 @@ with open(path / 'system/token.txt', 'r') as file:
 intents = discord.Intents().all()
 sylveon = commands.Bot(command_prefix=prefixgetter, case_insensitive=True, intents=intents,
                        activity=discord.Activity(activity=discord.Game(
-                           name=f"with friends!")))
+                           name=f"with friends!")), help=Help())
 crystalball = ["Yes", "No", "Perhaps", "Maybe", "It Is Certain", "Impossible"]
 embedcolor = 0xFD6A02
-
-sylveon.help_command = Help()
-
-
-@sylveon.event
-async def on_ready():
-    print(f'Logged on as {sylveon.user.name}, prefix: prefixgetter(sylveon, guild)')
-    await sylveon.change_presence(
-        activity=discord.Game(
-            name=f"with friends!"))
-
 
 @sylveon.event
 async def on_message(message):
@@ -88,33 +77,16 @@ async def hello(ctx):
     await ctx.channel.send('https://tenor.com/view/hello-there-hi-there-greetings-gif-9442662')
 
 
-@sylveon.command()
-async def count(ctx):
-    await ctx.channel.send(f"This server has {ctx.guild.member_count} members.")
-
 
 @sylveon.command()
-async def test(ctx):
-    embed = discord.Embed(colour=embedcolor)
-    embed.add_field(name="TEST", value="Test received!")
-    embed.set_footer(text=f"Request by {ctx.author}")
-    await ctx.send(embed=embed)
-
-
-@sylveon.command()
-async def ball(ctx):
+async def ball(ctx, *, question):
     await ctx.message.delete()
     send8ball = random.choice(crystalball)
     embed = discord.Embed(colour=embedcolor)
-    embed.add_field(name="Result", value=f"{send8ball}")
+    embed.add_field(name=question, value=f"{send8ball}")
     embed.set_footer(text=f"Request by {ctx.author}")
     await ctx.send(embed=embed)
 
-
-@sylveon.command()
-async def bruh(ctx):
-    await ctx.message.delete()
-    await ctx.channel.send("That is quite bruh.")
 
 
 @sylveon.command()
@@ -204,7 +176,22 @@ async def snuggle(ctx, members: commands.Greedy[discord.Member] = None, *, reaso
                     "https://tenor.com/view/gif-fofinho-heart-love-cuddle-cute-gif-14676815"]
         await ctx.send(random.choice(snuggles))
 
-
+        
+@sylveon.command(aliases=['safe', 'lifeline', 'prevention', 'suicideprevention', 'suicidepreventionhotline'])
+async def suicide(ctx, members: commands.Greedy[discord.Member] = None)
+    for member in members:
+        member_direct_message = await member.create_dm()
+        await member_direct_message.send(f"""
+        Suicide is never the awnser.
+        Losing a friend or family member to suicide is the worst way to lose them, and there’s no undoing it. Once you die, there is no coming back, there’s no replacing what was lost. Suicide is worse than a car accident, worse than being shot, because everybody feels responsible. Every person who cares about you will blame themselves for it, because they have nobody else to blame. Some of them may take their own lives as well, continuing the domino effect. Life might be bad,  but it will get better. You still have your whole life ahead of you, you can and will accomplish so much with it. Ending it all at your darkest moment will not make it better. 
+        You matter.
+        People care about you.
+        Your life is significant.
+        Whoever sent this will do everything in their power stop you from taking your own life, and I know that others will do the same.
+        Talking to someone- anyone- that you know won't try to hurt you is important. If you don't know or can't find anyone, you can call 1-800-273-8255 or go to https://suicidepreventionlifeline.com/chat
+        - {ctx.author.mention}, valkyrie_pilot#2707, and smallpepperz#0681.
+        """)
+        
 @sylveon.event
 async def on_command_error(ctx, error):
     if hasattr(ctx.command, 'on_error'):
