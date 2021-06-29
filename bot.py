@@ -34,7 +34,7 @@ with open(path / 'system/token.txt', 'r') as file:
 intents = discord.Intents().all()
 sylveon = commands.Bot(command_prefix=prefixgetter, case_insensitive=True, intents=intents,
                        activity=discord.Activity(activity=discord.Game(
-                           name=f"with friends!")), help_command=commands.MinimalHelpCommand)
+                           name=f"with friends!")), help_command=commands.MinimalHelpCommand())
 embedcolor = 0xFD6A02
 
 @sylveon.event
