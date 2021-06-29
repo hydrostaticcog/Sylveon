@@ -207,7 +207,7 @@ async def cuddle(ctx, members: commands.Greedy[discord.Member] = None, *, reason
         reason = reason.replace("@here", "❤️")
         await ctx.send(f"{mentions}, {ctx.author.mention} cuddles you, {reason}")
         hugs = ["https://tenor.com/bgaNg.gif",
-               ]
+               "https://tenor.com/WdJI.gif"]
         await ctx.send(random.choice(hugs))
 @sylveon.event
 async def on_command_error(ctx, error):
