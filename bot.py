@@ -184,14 +184,14 @@ async def suicide(ctx, members: commands.Greedy[discord.Member] = None):
     for member in members:
         member_direct_message = await member.create_dm()
         await member_direct_message.send(f"""
-        Suicide is never the awnser.
-        Losing a friend or family member to suicide is the worst way to lose them, and there’s no undoing it. Once you die, there is no coming back, there’s no replacing what was lost. Suicide is worse than a car accident, worse than being shot, because everybody feels responsible. Every person who cares about you will blame themselves for it, because they have nobody else to blame. Some of them may take their own lives as well, continuing the domino effect. Life might be bad,  but it will get better. You still have your whole life ahead of you, you can and will accomplish so much with it. Ending it all at your darkest moment will not make it better. 
-        You matter.
-        People care about you.
-        Your life is significant.
-        Whoever sent this will do everything in their power stop you from taking your own life, and I know that others will do the same.
-        Talking to someone- anyone- that you know won't try to hurt you is important. If you don't know or can't find anyone, you can call 1-800-273-8255 or go to https://suicidepreventionlifeline.com/chat
-        - {ctx.author.mention}, valkyrie_pilot#2707, and smallpepperz#0681.
+Suicide is never the awnser.
+Losing a friend or family member to suicide is the worst way to lose them, and there’s no undoing it. Once you die, there is no coming back, there’s no replacing what was lost. Suicide is worse than a car accident, worse than being shot, because everybody feels responsible. Every person who cares about you will blame themselves for it, because they have nobody else to blame. Some of them may take their own lives as well, continuing the domino effect. Life might be bad,  but it will get better. You still have your whole life ahead of you, you can and will accomplish so much with it. Ending it all at your darkest moment will not make it better. 
+You matter.
+People care about you.
+Your life is significant.
+Whoever sent this will do everything in their power stop you from taking your own life, and I know that others will do the same.
+Talking to someone- anyone- that you know won't try to hurt you is important. If you don't know or can't find anyone, you can call 1-800-273-8255 or go to https://suicidepreventionlifeline.com/chat
+- {ctx.author.mention}, valkyrie_pilot#2707, and smallpepperz#0681.
         """)
         
 @sylveon.event
