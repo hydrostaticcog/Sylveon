@@ -179,6 +179,7 @@ async def snuggle(ctx, members: commands.Greedy[discord.Member] = None, *, reaso
         
 @sylveon.command(aliases=['safe', 'lifeline', 'prevention', 'suicideprevention', 'suicidepreventionhotline'])
 async def suicide(ctx, members: commands.Greedy[discord.Member] = None):
+    await ctx.message.delete()
     if members is None:
         members = [ctx.author]
     for member in members:
