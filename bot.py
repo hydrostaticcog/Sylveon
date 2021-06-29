@@ -28,34 +28,13 @@ async def prefixgetter(_, message):
         return default_prefix
 
 
-class Help(commands.MinimalHelpCommand):
-    def get_command_signature(self, command):
-        return '%s%s %s' % (self.clean_prefix, command.qualified_name, command.signature)
-
-    async def send_bot_help(self, mapping):
-        embed = discord.Embed(title="Help")
-        for cog, commands in mapping.items():
-            filtered = await self.filter_commands(commands, sort=True)
-            command_signatures = [self.get_command_signature(c) for c in filtered]
-            if command_signatures:
-                cog_name = getattr(cog, "qualified_name", "System")
-                embed.add_field(name=cog_name, value="\n".join(command_signatures), inline=False)
-        channel = self.get_destination()
-        await channel.send(embed=embed)
-
-    async def send_error_message(self, error):
-        embed = discord.Embed(title="Error", value=error)
-        channel = self.get_destination()
-        await channel.send(embed=embed)
-
 
 with open(path / 'system/token.txt', 'r') as file:
     TOKEN = file.read()
 intents = discord.Intents().all()
 sylveon = commands.Bot(command_prefix=prefixgetter, case_insensitive=True, intents=intents,
                        activity=discord.Activity(activity=discord.Game(
-                           name=f"with friends!")), help_command=Help())
-crystalball = ["Yes", "No", "Perhaps", "Maybe", "It Is Certain", "Impossible"]
+                           name=f"with friends!")), help_command=commands.MinimalHelpCommand)
 embedcolor = 0xFD6A02
 
 @sylveon.event
@@ -73,24 +52,15 @@ async def on_message(message):
 
 @sylveon.command()
 async def hello(ctx):
+    """o/"""
     await ctx.message.delete()
     await ctx.channel.send('https://tenor.com/view/hello-there-hi-there-greetings-gif-9442662')
 
 
 
 @sylveon.command()
-async def ball(ctx, *, question):
-    await ctx.message.delete()
-    send8ball = random.choice(crystalball)
-    embed = discord.Embed(colour=embedcolor)
-    embed.add_field(name=question, value=f"{send8ball}")
-    embed.set_footer(text=f"Request by {ctx.author}")
-    await ctx.send(embed=embed)
-
-
-
-@sylveon.command()
 async def ping(ctx):
+    """get bot ping"""
     await ctx.message.delete()
     embed = discord.Embed(colour=embedcolor)
     embed.add_field(name="Ping", value=f'🏓 Pong! {round(sylveon.latency * 1000)}ms')
@@ -120,6 +90,7 @@ async def prefix(ctx, newprefix):  # context and what we should set the new pref
 
 @sylveon.command()
 async def hug(ctx, members: commands.Greedy[discord.Member] = None, *, reason="aww!"):
+    """Gives someone- or a lot of someones- a hug :D"""
     sent = False
     mentions = []
     if members:
@@ -151,6 +122,7 @@ async def hug(ctx, members: commands.Greedy[discord.Member] = None, *, reason="a
 
 @sylveon.command()
 async def snuggle(ctx, members: commands.Greedy[discord.Member] = None, *, reason="aww!"):
+    """Snuggles someone or multiple people. When you want closeness but not romance"""
     sent = False
     mentions = []
     if members:
@@ -170,7 +142,7 @@ async def snuggle(ctx, members: commands.Greedy[discord.Member] = None, *, reaso
     if not sent:
         reason = reason.replace("@everyone", "aww")
         reason = reason.replace("@here", "aww")
-        await ctx.send(f"{mentions}, {ctx.author.mention} gave you a snuggle, {reason}")
+        await ctx.send(f"{mentions}, {ctx.author.mention} wants to snuggle, {reason}")
         snuggles = ["https://tenor.com/view/rosy-cheeks-mochi-peach-mochi-cat-cute-kitty-peach-cat-gif-16992602",
                     "https://tenor.com/view/pats-cute-cats-love-gif-13979931",
                     "https://tenor.com/view/gif-fofinho-heart-love-cuddle-cute-gif-14676815"]
@@ -179,6 +151,7 @@ async def snuggle(ctx, members: commands.Greedy[discord.Member] = None, *, reaso
         
 @sylveon.command(aliases=['safe', 'lifeline', 'prevention', 'suicideprevention', 'suicidepreventionhotline'])
 async def suicide(ctx, members: commands.Greedy[discord.Member] = None):
+    """if someone is in danger of hurting themselves, this sends them a link to the Suicide Prevention Hotline."""
     await ctx.message.delete()
     if members is None:
         members = [ctx.author]
@@ -195,6 +168,33 @@ Talking to someone- anyone- that you know won't try to hurt you is important. If
 - {ctx.author.mention}, valkyrie_pilot#2707, and smallpepperz#0681.
         """)
         
+        
+@sylveon.command()
+async def cuddle(ctx, members: commands.Greedy[discord.Member] = None, *, reason="❤️"):
+    """when you want to cuddle with someone, because you love them"""
+    sent = False
+    mentions = []
+    if members:
+        for person in members:
+            if person.id == 808149899182342145:
+                await ctx.send("But that's Glaceon!")
+                await ctx.send("https://tenor.com/view/anime-blush-girl-gif-19459906")
+                sent = True
+        for person in members:
+            mentions.append(person.mention)
+        mentions = " ".join(mentions)
+    elif ctx.message.mention_everyone:
+        mentions = "@everyone"
+        reason = reason.replace("@everyone", "❤️")
+    else:
+        mentions = " :D"
+    if not sent:
+        reason = reason.replace("@everyone", "❤️")
+        reason = reason.replace("@here", "❤️")
+        await ctx.send(f"{mentions}, {ctx.author.mention} cuddles you, {reason}")
+        hugs = ["https://tenor.com/bgaNg.gif",
+               ]
+        await ctx.send(random.choice(hugs))
 @sylveon.event
 async def on_command_error(ctx, error):
     if hasattr(ctx.command, 'on_error'):
