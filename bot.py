@@ -27,14 +27,28 @@ async def prefixgetter(_, message):
     else:
         return default_prefix
 
+class Help(commands.HelpCommand):
+   def get_command_signature(self, command):
+        return '%s%s %s' % (self.clean_prefix, command.qualified_name, command.signature)
 
+    async def send_bot_help(self, mapping):
+        embed = discord.Embed(title="Help")
+        for cog, commands in mapping.items():
+           filtered = await self.filter_commands(commands, sort=True)
+           command_signatures = [self.get_command_signature(c) for c in filtered]
+           if command_signatures:
+                cog_name = getattr(cog, "qualified_name", "Commands")
+                embed.add_field(name=cog_name, value="\n".join(command_signatures), inline=False)
+
+        channel = self.get_destination()
+        await channel.send(embed=embed)
 
 with open(path / 'system/token.txt', 'r') as file:
     TOKEN = file.read()
 intents = discord.Intents().all()
 sylveon = commands.Bot(command_prefix=prefixgetter, case_insensitive=True, intents=intents,
                        activity=discord.Activity(activity=discord.Game(
-                           name=f"with friends!")))
+                           name=f"with friends!")), help_command=Help())
 embedcolor = 0xFD6A02
 
 @sylveon.event
