@@ -54,7 +54,7 @@ with open(path / 'system/token.txt', 'r') as file:
 intents = discord.Intents().all()
 sylveon = commands.Bot(command_prefix=prefixgetter, case_insensitive=True, intents=intents,
                        activity=discord.Activity(activity=discord.Game(
-                           name=f"with friends!")), help=Help())
+                           name=f"with friends!")), help_command=Help())
 crystalball = ["Yes", "No", "Perhaps", "Maybe", "It Is Certain", "Impossible"]
 embedcolor = 0xFD6A02
 
@@ -179,6 +179,8 @@ async def snuggle(ctx, members: commands.Greedy[discord.Member] = None, *, reaso
         
 @sylveon.command(aliases=['safe', 'lifeline', 'prevention', 'suicideprevention', 'suicidepreventionhotline'])
 async def suicide(ctx, members: commands.Greedy[discord.Member] = None):
+    if members is None:
+        members = [ctx.author]
     for member in members:
         member_direct_message = await member.create_dm()
         await member_direct_message.send(f"""
