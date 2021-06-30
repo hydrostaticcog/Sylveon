@@ -27,6 +27,7 @@ async def prefixgetter(_, message):
     else:
         return default_prefix
 
+
 class Help(commands.HelpCommand):
     def get_command_signature(self, command):
         return '%s%s %s' % (self.clean_prefix, command.qualified_name, command.signature)
@@ -43,6 +44,7 @@ class Help(commands.HelpCommand):
             channel = self.get_destination()
             await channel.send(embed=embed)
 
+
 with open(path / 'system/token.txt', 'r') as file:
     TOKEN = file.read()
 intents = discord.Intents().all()
@@ -50,6 +52,7 @@ sylveon = commands.Bot(command_prefix=prefixgetter, case_insensitive=True, inten
                        activity=discord.Activity(activity=discord.Game(
                            name=f"with friends!")), help_command=Help())
 embedcolor = 0xFD6A02
+
 
 @sylveon.event
 async def on_message(message):
@@ -69,7 +72,6 @@ async def hello(ctx):
     """o/"""
     await ctx.message.delete()
     await ctx.channel.send('https://tenor.com/view/hello-there-hi-there-greetings-gif-9442662')
-
 
 
 @sylveon.command()
@@ -162,7 +164,34 @@ async def snuggle(ctx, members: commands.Greedy[discord.Member] = None, *, reaso
                     "https://tenor.com/view/gif-fofinho-heart-love-cuddle-cute-gif-14676815"]
         await ctx.send(random.choice(snuggles))
 
-        
+    @sylveon.command()
+    async def cuddle(ctx, members: commands.Greedy[discord.Member] = None, *, reason="❤️"):
+        """when you want to cuddle with someone, because you love them"""
+        sent = False
+        mentions = []
+        if members:
+            for person in members:
+                if person.id == 808149899182342145:
+                    await ctx.send("But that's Glaceon!")
+                    await ctx.send("https://tenor.com/view/anime-blush-girl-gif-19459906")
+                    sent = True
+            for person in members:
+                mentions.append(person.mention)
+            mentions = " ".join(mentions)
+        elif ctx.message.mention_everyone:
+            mentions = "@everyone"
+            reason = reason.replace("@everyone", "❤️")
+        else:
+            mentions = " :D"
+        if not sent:
+            reason = reason.replace("@everyone", "❤️")
+            reason = reason.replace("@here", "❤️")
+            await ctx.send(f"{mentions}, {ctx.author.mention} cuddles you, {reason}")
+            cuddles = ["https://tenor.com/bgaNg.gif",
+                       "https://tenor.com/WdJI.gif"]
+            await ctx.send(random.choice(cuddles))
+
+
 @sylveon.command(aliases=['safe', 'lifeline', 'prevention', 'suicideprevention', 'suicidepreventionhotline'])
 async def suicide(ctx, members: commands.Greedy[discord.Member] = None):
     """if someone is in danger of hurting themselves, this sends them a link to the Suicide Prevention Hotline."""
@@ -170,45 +199,27 @@ async def suicide(ctx, members: commands.Greedy[discord.Member] = None):
     if members is None:
         members = [ctx.author]
     for member in members:
-        member_direct_message = await member.create_dm()
-        await member_direct_message.send(f"""
-Suicide is never the awnser.
-Losing a friend or family member to suicide is the worst way to lose them, and there’s no undoing it. Once you die, there is no coming back, there’s no replacing what was lost. Suicide is worse than a car accident, worse than being shot, because everybody feels responsible. Every person who cares about you will blame themselves for it, because they have nobody else to blame. Some of them may take their own lives as well, continuing the domino effect. Life might be bad,  but it will get better. You still have your whole life ahead of you, you can and will accomplish so much with it. Ending it all at your darkest moment will not make it better. 
-You matter.
-People care about you.
-Your life is significant.
-Whoever sent this will do everything in their power stop you from taking your own life, and I know that others will do the same.
-Talking to someone- anyone- that you know won't try to hurt you is important. If you don't know or can't find anyone, you can call 1-800-273-8255 or go to https://suicidepreventionlifeline.com/chat
-- {ctx.author.mention}, valkyrie_pilot#2707, and smallpepperz#0681.
-        """)
-        
-        
-@sylveon.command()
-async def cuddle(ctx, members: commands.Greedy[discord.Member] = None, *, reason="❤️"):
-    """when you want to cuddle with someone, because you love them"""
-    sent = False
-    mentions = []
-    if members:
-        for person in members:
-            if person.id == 808149899182342145:
-                await ctx.send("But that's Glaceon!")
-                await ctx.send("https://tenor.com/view/anime-blush-girl-gif-19459906")
-                sent = True
-        for person in members:
-            mentions.append(person.mention)
-        mentions = " ".join(mentions)
-    elif ctx.message.mention_everyone:
-        mentions = "@everyone"
-        reason = reason.replace("@everyone", "❤️")
-    else:
-        mentions = " :D"
-    if not sent:
-        reason = reason.replace("@everyone", "❤️")
-        reason = reason.replace("@here", "❤️")
-        await ctx.send(f"{mentions}, {ctx.author.mention} cuddles you, {reason}")
-        hugs = ["https://tenor.com/bgaNg.gif",
-               "https://tenor.com/WdJI.gif"]
-        await ctx.send(random.choice(hugs))
+        try:
+            member_direct_message = await member.create_dm()
+            await member_direct_message.send(f"""
+    Suicide is never the answer.
+    Losing a friend or family member to suicide is the worst way to lose them, and there’s no undoing it. Once you die, there is no coming back, there’s no replacing what was lost. Suicide is worse than a car accident, worse than being shot, because everybody feels responsible. Every person who cares about you will blame themselves for it, because they have nobody else to blame. Some of them may take their own lives as well, continuing the domino effect. Life might be bad,  but it will get better. You still have your whole life ahead of you, you can and will accomplish so much with it. Ending it all at your darkest moment will not make it better. 
+    You matter.
+    People care about you.
+    Your life is significant.
+    Whoever sent this will do everything in their power stop you from taking your own life, and I know that others will do the same.
+    Talking to someone- anyone- that you know won't try to hurt you is important. If you don't know or can't find anyone, you can call 1-800-273-8255 or go to https://suicidepreventionlifeline.com/chat
+    - {ctx.author}, valkyrie_pilot#2707, and smallpepperz#0681.
+            """)
+        except discord.Forbidden or discord.HTTPException:
+            try:
+                author_dm = await ctx.author.create_dm()
+                await author_dm.send("Unable to send a message to your friend. Links: `You can call 1-800-273-8255 or "
+                                     "go to https://suicidepreventionlifeline.com/chat`. Please go talk to them yourself.")
+            except discord.Forbidden or discord.HTTPException:
+                pass
+
+
 @sylveon.event
 async def on_command_error(ctx, error):
     if hasattr(ctx.command, 'on_error'):
