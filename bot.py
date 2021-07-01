@@ -2,6 +2,7 @@
 import pathlib
 import random
 import traceback
+import typing
 
 import aiosqlite
 import discord
@@ -193,7 +194,7 @@ async def snuggle(ctx, members: commands.Greedy[discord.Member] = None, *, reaso
 
 
 @sylveon.command(aliases=['safe', 'lifeline', 'prevention', 'suicideprevention', 'suicidepreventionhotline'])
-async def suicide(ctx, members: commands.Greedy[discord.Member] = None):
+async def suicide(ctx, members: commands.Greedy[discord.Member] = None, *, custom_message: typing.Optional[str] = "You are an incredible person who will do incredible things. You deserve the world."):
     """if someone is in danger of hurting themselves, this sends them a link to the Suicide Prevention Hotline."""
     await ctx.message.delete()
     if members is None:
@@ -206,6 +207,7 @@ Losing a friend or family member to suicide is the worst way to lose them, and t
 You matter.
 People care about you.
 Your life is significant.
+{custom_message}
 Whoever sent this will do everything in their power stop you from taking your own life, and I know that others will do the same.
 Talking to someone- anyone- that you know won't try to hurt you is important. If you don't know or can't find anyone, you can call 1-800-273-8255 or go to https://suicidepreventionlifeline.com/chat
 - {ctx.author}, valkyrie_pilot#2707, and smallpepperz#0681.
