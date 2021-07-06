@@ -164,33 +164,31 @@ async def snuggle(ctx, members: commands.Greedy[discord.Member] = None, *, reaso
                     "https://tenor.com/view/pats-cute-cats-love-gif-13979931",
                     "https://tenor.com/view/gif-fofinho-heart-love-cuddle-cute-gif-14676815"]
         await ctx.send(random.choice(snuggles))
-
-    @sylveon.command()
-    async def cuddle(ctx, members: commands.Greedy[discord.Member] = None, *, reason="❤️"):
-        """when you want to cuddle with someone, because you love them"""
-        sent = False
-        mentions = []
-        if members:
-            for person in members:
-                if person.id == 808149899182342145:
-                    await ctx.send("But that's Glaceon!")
-                    await ctx.send("https://tenor.com/view/anime-blush-girl-gif-19459906")
-                    sent = True
-            for person in members:
-                mentions.append(person.mention)
-            mentions = " ".join(mentions)
-        elif ctx.message.mention_everyone:
-            mentions = "@everyone"
-            reason = reason.replace("@everyone", "❤️")
-        else:
-            mentions = " :D"
-        if not sent:
-            reason = reason.replace("@everyone", "❤️")
-            reason = reason.replace("@here", "❤️")
-            await ctx.send(f"{mentions}, {ctx.author.mention} cuddles you, {reason}")
-            cuddles = ["https://tenor.com/bgaNg.gif",
-                       "https://tenor.com/WdJI.gif"]
-            await ctx.send(random.choice(cuddles))
+        
+@sylveon.command()
+async def cuddle(ctx, members: commands.Greedy[discord.Member] = None, *, reason="❤️"):
+    """when you want to cuddle with someone, because you love them"""
+    mentions = []
+    if members:
+        for person in members:
+            if person.id == 808149899182342145:
+                await ctx.send("But that's Glaceon!")
+                await ctx.send("https://tenor.com/view/anime-blush-girl-gif-19459906")
+                return
+        for person in members:
+            mentions.append(person.mention)
+        mentions = " ".join(mentions)
+    elif ctx.message.mention_everyone:
+        mentions = "@everyone"
+        reason = reason.replace("@everyone", "❤️")
+    else:
+        mentions = " :D"
+    reason = reason.replace("@everyone", "❤️")
+    reason = reason.replace("@here", "❤️")
+    await ctx.send(f"{mentions}, {ctx.author.mention} cuddles you, {reason}")
+    cuddles = ["https://tenor.com/bgaNg.gif",
+               "https://tenor.com/WdJI.gif"]
+    await ctx.send(random.choice(cuddles))
 
 
 @sylveon.command(aliases=['safe', 'lifeline', 'prevention', 'suicideprevention', 'suicidepreventionhotline'])
