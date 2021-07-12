@@ -110,7 +110,6 @@ async def prefix(ctx, newprefix):  # context and what we should set the new pref
 
 @sylveon.command(aliases=["b64", "base64", "encode", "encodenick"])
 @commands.has_permissions(change_nickname=True)
-@commands.bot_has_permissions(manage_nicknames=True)
 async def base64_encode(ctx, *, string=None):
     if string is None:
         nickname = base64.b64encode(ctx.author.display_name.encode()).decode()
@@ -125,7 +124,7 @@ async def base64_encode(ctx, *, string=None):
             await ctx.author.edit(nick=nickname)
         except discord.Forbidden:
             await ctx.reply(
-                "Your nickname could not be changed, probably because you are above me in the role hierarchy. "
+                "Your nickname could not be changed, probably because you are above me in the role hierarchy or i don't have manage nicknames. "
                 "Here is your encoded display name, so you can change it: `" + base64.b64encode(ctx.author.display_name.encode()).decode() + "`")
             return
         await ctx.reply("Base64 encoded nickname!")
