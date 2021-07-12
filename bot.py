@@ -109,7 +109,7 @@ async def prefix(ctx, newprefix):  # context and what we should set the new pref
 @sylveon.command()
 @commands.has_permissions(change_nickname=True)
 @commands.bot_has_permissions(manage_nicknames=True)
-async def b64(ctx, *, string):
+async def b64(ctx, *, string=None):
     if string is None:
         await ctx.author.edit(nick=base64.b64encode(ctx.author.display_name))
         await ctx.reply("Base64 encoded nickname")
