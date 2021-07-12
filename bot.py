@@ -306,7 +306,7 @@ async def leave(ctx, guild_id: typing.Optional[int] = None):
     if guild_id is None:
         guild_id = ctx.guild.id
     guild = sylveon.get_guild(guild_id)
-    await ctx.reply("Leaving guild " + guild.name)
+    await ctx.reply("Leaving guild `" + guild.name + "`!")
     await guild.leave()
 
 
