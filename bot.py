@@ -157,7 +157,7 @@ async def base64_decode(ctx, *, string=None):
     if len(b64_encoded_string) > 2000:
         await ctx.reply("That string is too long.")
         return
-    await ctx.reply(deping(b64_encoded_string))
+    await ctx.reply(await deping(b64_encoded_string))
 
 
 @sylveon.command(aliases=["isotoepoch", "iso2unix", "isotounix"])
