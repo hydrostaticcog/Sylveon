@@ -2,6 +2,7 @@
 import binascii
 import pathlib
 import random
+import re
 import traceback
 import typing
 import base64
@@ -14,7 +15,14 @@ from discord.ext import commands
 path = pathlib.PurePath()
 
 
-async def prefixgetter(_, message):
+async def deping(text) -> str:
+    text.replace("@everyone", "@ everyone")
+    text.replace("@here", " @ here")
+    text = re.sub("<@(!?)([0-9]*)>", "dont ping people with this", text)
+    return text
+
+
+async def prefixgetter(_, message) -> str:
     default_prefix = "&"
     try:
         sid = message.guild.id
@@ -118,15 +126,15 @@ async def base64_encode(ctx, *, string=None):
             if len(nickname) > 32:
                 await ctx.reply(
                     "Whoops! base64 encoding of your nickname and name both failed! B64 encoding of your display "
-                    "name: ` " + nickname + "`")
+                    "name: ` " + await deping(nickname) + "`")
                 return
         try:
             await ctx.author.edit(nick=nickname)
         except discord.Forbidden:
             await ctx.reply(
                 "Your nickname could not be changed, probably because you are above me in the role hierarchy or i don't have manage nicknames. "
-                "Here is your encoded display name, so you can change it: `" + base64.b64encode(
-                    ctx.author.display_name.encode()).decode() + "`")
+                "Here is your encoded display name, so you can change it: `" + await deping(base64.b64encode(
+                    ctx.author.display_name.encode()).decode()) + "`")
             return
         await ctx.reply("Base64 encoded nickname!")
     else:
@@ -134,7 +142,7 @@ async def base64_encode(ctx, *, string=None):
         if len(b64_encoded_string) > 2000:
             await ctx.reply("That string is too long.")
             return
-        await ctx.reply(b64_encoded_string)
+        await ctx.reply(await deping(b64_encoded_string))
 
 
 @sylveon.command(aliases=["b64_decode", "decode"])
@@ -149,7 +157,7 @@ async def base64_decode(ctx, *, string=None):
     if len(b64_encoded_string) > 2000:
         await ctx.reply("That string is too long.")
         return
-    await ctx.reply(b64_encoded_string)
+    await ctx.reply(deping(b64_encoded_string))
 
 
 @sylveon.command(aliases=["isotoepoch", "iso2unix", "isotounix"])
