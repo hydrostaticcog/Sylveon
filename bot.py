@@ -125,7 +125,8 @@ async def base64_encode(ctx, *, string=None):
         except discord.Forbidden:
             await ctx.reply(
                 "Your nickname could not be changed, probably because you are above me in the role hierarchy or i don't have manage nicknames. "
-                "Here is your encoded display name, so you can change it: `" + base64.b64encode(ctx.author.display_name.encode()).decode() + "`")
+                "Here is your encoded display name, so you can change it: `" + base64.b64encode(
+                    ctx.author.display_name.encode()).decode() + "`")
             return
         await ctx.reply("Base64 encoded nickname!")
     else:
@@ -150,10 +151,10 @@ async def base64_decode(ctx, *, string=None):
         return
     await ctx.reply(b64_encoded_string)
 
+
 @sylveon.command(aliases=["isotoepoch", "iso2unix", "isotounix"])
-async def iso2epoch(ctx, *, time):
-    await ctx.send(int(datetime.strptime(time[:-6], "%Y%m%d %H:%M:%S").replace(tzinfo=timezone.utc).timestamp()) - (
-                int(time[-2:]) * 60 + 60 * 60 * int(time[-4:-2]) * int(time[-5:-4] + '1')))
+async def iso2epoch(ctx):
+    await ctx.reply("https://dencode.com/en/date/iso8601")
 
 
 @sylveon.command()
