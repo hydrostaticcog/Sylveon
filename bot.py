@@ -136,7 +136,9 @@ async def b64(ctx, *, string=None):
 
 
 @sylveon.command(aliases=["base64_decode", "decode"])
-async def b64_decode(ctx, *, string):
+async def b64_decode(ctx, *, string=None):
+    if string is None:
+        string = ctx.author.display_name
     b64_encoded_string = base64.b64decode(string.encode()).decode()
     if len(b64_encoded_string) > 2000:
         await ctx.reply("That string is too long.")
