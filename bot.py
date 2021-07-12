@@ -3,6 +3,7 @@ import pathlib
 import random
 import traceback
 import typing
+import base64
 
 import aiosqlite
 import discord
@@ -104,6 +105,16 @@ async def prefix(ctx, newprefix):  # context and what we should set the new pref
     await db.close()  # close connection
     await ctx.send(f"Prefix set to {newprefix}")  # tell admin what happened
 
+
+@sylveon.command()
+@commands.has_permissions(change_nickname=True)
+@commands.bot_has_permissions(manage_nicknames=True)
+async def b64(ctx, *, string):
+    if string is None:
+        await ctx.author.edit(nick=base64.b64encode(ctx.author.display_name))
+        await ctx.reply("Base64 encoded nickname")
+    else:
+        await ctx.reply(base64.b64encode(string))
 
 @sylveon.command()
 async def hug(ctx, members: commands.Greedy[discord.Member] = None, *, reason="aww!"):
