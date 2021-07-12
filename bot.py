@@ -1,4 +1,5 @@
 #!venv/bin/python3
+import binascii
 import pathlib
 import random
 import traceback
@@ -124,7 +125,7 @@ async def b64(ctx, *, string=None):
         except discord.Forbidden:
             await ctx.reply(
                 "Your nickname could not be changed, probably because you are above me in the role hierarchy. "
-                "Here is your encoded display name, so you can change it: `" + nickname + "`")
+                "Here is your encoded display name, so you can change it: `" + base64.b64encode(ctx.author.display_name.encode()).decode() + "`")
             return
         await ctx.reply("Base64 encoded nickname!")
     else:
@@ -139,7 +140,11 @@ async def b64(ctx, *, string=None):
 async def b64_decode(ctx, *, string=None):
     if string is None:
         string = ctx.author.display_name
-    b64_encoded_string = base64.b64decode(string.encode()).decode()
+    try:
+        b64_encoded_string = base64.b64decode(string.encode()).decode()
+    except binascii.Error:
+        await ctx.send("Your name doesn't seem to be a base64 string!")
+        return
     if len(b64_encoded_string) > 2000:
         await ctx.reply("That string is too long.")
         return
