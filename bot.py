@@ -6,13 +6,12 @@ import re
 import traceback
 import typing
 import base64
-from datetime import datetime, timezone
 
 import aiosqlite
 import discord
 from discord.ext import commands
 
-path = pathlib.PurePath()
+path = pathlib.Path()
 
 
 async def deping(text) -> str:
@@ -99,6 +98,26 @@ async def ping(ctx):
 @sylveon.command()
 @commands.has_permissions(administrator=True)  # requires that the person issuing the command has administrator perms
 async def prefix(ctx, newprefix):  # context and what we should set the new prefix to
+    """Sets the bot prefix for this server"""
+    serverid = ctx.guild.id  # gets serverid for convinience
+    db = await aiosqlite.connect(path / 'system/data.db')  # connect to our server data db
+    dataline = await db.execute(
+        f'''SELECT prefix FROM prefixes WHERE serverid = {serverid}''')  # get the current prefix for that server,
+    # if it exists
+    if await dataline.fetchone() is not None:  # actually check if it exists
+        await db.execute("""UPDATE prefixes SET prefix = ? WHERE serverid = ?""",
+                         (newprefix, serverid))  # update prefix
+    else:
+        await db.execute("INSERT INTO prefixes(serverid, prefix) VALUES (?,?)",
+                         (serverid, newprefix))  # set new prefix
+    await db.commit()  # say "yes i want to do this for sure"
+    await db.close()  # close connection
+    await ctx.send(f"Prefix set to {newprefix}")  # tell admin what happened
+
+
+@sylveon.command(aliases=['owner_prefix'])
+@commands.is_owner()  # requires that the person issuing the command has administrator perms
+async def ownerprefix(ctx, newprefix):  # context and what we should set the new prefix to
     """Sets the bot prefix for this server"""
     serverid = ctx.guild.id  # gets serverid for convinience
     db = await aiosqlite.connect(path / 'system/data.db')  # connect to our server data db
@@ -279,6 +298,16 @@ Talking to someone- anyone- that you know won't try to hurt you is important. If
                                      "go to https://suicidepreventionlifeline.com/chat`. Please go talk to them yourself.")
             except discord.Forbidden or discord.HTTPException:
                 pass
+
+
+@sylveon.command()
+@commands.is_owner()
+async def leave(ctx, guild_id=None):
+    if guild_id is None:
+        guild_id = ctx.guild.id
+    guild = sylveon.get_guild(guild_id)
+    await ctx.reply("Leaving guild" + guild.name)
+    await guild.leave()
 
 
 @sylveon.event
