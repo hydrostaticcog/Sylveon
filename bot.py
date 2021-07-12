@@ -125,7 +125,8 @@ async def b64(ctx, *, string=None):
             await ctx.reply(
                 "Your nickname could not be changed, probably because you are above me in the role hierarchy. "
                 "Here is your encoded display name, so you can change it: `" + nickname + "`")
-        await ctx.reply("Base64 encoded nickname")
+            return
+        await ctx.reply("Base64 encoded nickname!")
     else:
         b64_encoded_string = base64.b64encode(string.encode()).decode()
         if len(b64_encoded_string) > 2000:
