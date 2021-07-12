@@ -143,7 +143,7 @@ async def base64_decode(ctx, *, string=None):
     try:
         b64_encoded_string = base64.b64decode(string.encode()).decode()
     except binascii.Error:
-        await ctx.send("Your name doesn't seem to be a base64 string!")
+        await ctx.send("Your name or input doesn't seem to be a base64 string!")
         return
     if len(b64_encoded_string) > 2000:
         await ctx.reply("That string is too long.")
