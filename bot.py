@@ -16,9 +16,9 @@ path = pathlib.PurePath()
 
 
 async def deping(text) -> str:
-    text.replace("@everyone", "@ everyone")
-    text.replace("@here", " @ here")
-    text = re.sub("<@(!?)([0-9]*)>", "dont ping people with this", text)
+    text.replace("@everyone", "Please do not attempt to ping people with this command!")
+    text.replace("@here", "Please do not attempt to ping people with this command!")
+    text = re.sub("<@(!?)([0-9]*)>", "Please do not attempt to ping people with this command!", text)
     return text
 
 
