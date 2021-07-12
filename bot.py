@@ -106,15 +106,42 @@ async def prefix(ctx, newprefix):  # context and what we should set the new pref
     await ctx.send(f"Prefix set to {newprefix}")  # tell admin what happened
 
 
-@sylveon.command()
+@sylveon.command(aliases=["base64", "encode", "encodenick"])
 @commands.has_permissions(change_nickname=True)
 @commands.bot_has_permissions(manage_nicknames=True)
 async def b64(ctx, *, string=None):
     if string is None:
-        await ctx.author.edit(nick=base64.b64encode(ctx.author.display_name.encode()))
+        nickname = base64.b64encode(ctx.author.display_name.encode()).decode()
+        if len(nickname) > 32:
+            nickname = base64.b64encode(ctx.author.name.encode()).decode()
+            if len(nickname) > 32:
+                await ctx.reply(
+                    "Whoops! base64 encoding of your nickname and name both failed! B64 encoding of your display "
+                    "name: ` " + nickname + "`")
+                return
+        try:
+            await ctx.author.edit(nick=nickname)
+        except discord.Forbidden:
+            await ctx.reply(
+                "Your nickname could not be changed, probably because you are above me in the role hierarchy. "
+                "Here is your encoded display name, so you can change it: `" + nickname + "`")
         await ctx.reply("Base64 encoded nickname")
     else:
-        await ctx.reply(base64.b64encode(string.encode()))
+        b64_encoded_string = base64.b64encode(string.encode()).decode()
+        if len(b64_encoded_string) > 2000:
+            await ctx.reply("That string is too long.")
+            return
+        await ctx.reply(b64_encoded_string)
+
+
+@sylveon.command(aliases=["base64_decode", "decode"])
+async def b64_decode(ctx, *, string):
+    b64_encoded_string = base64.b64decode(string.encode()).decode()
+    if len(b64_encoded_string) > 2000:
+        await ctx.reply("That string is too long.")
+        return
+    await ctx.reply(b64_encoded_string)
+
 
 @sylveon.command()
 async def hug(ctx, members: commands.Greedy[discord.Member] = None, *, reason="aww!"):
@@ -175,7 +202,8 @@ async def snuggle(ctx, members: commands.Greedy[discord.Member] = None, *, reaso
                     "https://tenor.com/view/pats-cute-cats-love-gif-13979931",
                     "https://tenor.com/view/gif-fofinho-heart-love-cuddle-cute-gif-14676815"]
         await ctx.send(random.choice(snuggles))
-        
+
+
 @sylveon.command()
 async def cuddle(ctx, members: commands.Greedy[discord.Member] = None, *, reason="❤️"):
     """when you want to cuddle with someone, because you love them"""
@@ -203,7 +231,8 @@ async def cuddle(ctx, members: commands.Greedy[discord.Member] = None, *, reason
 
 
 @sylveon.command(aliases=['safe', 'lifeline', 'prevention', 'suicideprevention', 'suicidepreventionhotline'])
-async def suicide(ctx, members: commands.Greedy[discord.Member] = None, *, custom_message: typing.Optional[str] = "You are an incredible person who will do incredible things. You deserve the world."):
+async def suicide(ctx, members: commands.Greedy[discord.Member] = None, *, custom_message: typing.Optional[
+    str] = "You are an incredible person who will do incredible things. You deserve the world."):
     """if someone is in danger of hurting themselves, this sends them a link to the Suicide Prevention Hotline."""
     await ctx.message.delete()
     if members is None:
