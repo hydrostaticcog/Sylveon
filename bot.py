@@ -108,10 +108,10 @@ async def prefix(ctx, newprefix):  # context and what we should set the new pref
     await ctx.send(f"Prefix set to {newprefix}")  # tell admin what happened
 
 
-@sylveon.command(aliases=["base64", "encode", "encodenick"])
+@sylveon.command(aliases=["b64", "base64", "encode", "encodenick"])
 @commands.has_permissions(change_nickname=True)
 @commands.bot_has_permissions(manage_nicknames=True)
-async def b64(ctx, *, string=None):
+async def base64_encode(ctx, *, string=None):
     if string is None:
         nickname = base64.b64encode(ctx.author.display_name.encode()).decode()
         if len(nickname) > 32:
@@ -137,8 +137,8 @@ async def b64(ctx, *, string=None):
         await ctx.reply(b64_encoded_string)
 
 
-@sylveon.command(aliases=["base64_decode", "decode"])
-async def b64_decode(ctx, *, string=None):
+@sylveon.command(aliases=["b64_decode", "decode"])
+async def base64_decode(ctx, *, string=None):
     if string is None:
         string = ctx.author.display_name
     try:
