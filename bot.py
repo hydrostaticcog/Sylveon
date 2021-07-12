@@ -5,6 +5,7 @@ import random
 import traceback
 import typing
 import base64
+from datetime import datetime, timezone
 
 import aiosqlite
 import discord
@@ -149,6 +150,11 @@ async def b64_decode(ctx, *, string=None):
         await ctx.reply("That string is too long.")
         return
     await ctx.reply(b64_encoded_string)
+
+@sylveon.command(aliases=["isotoepoch", "iso2unix", "isotounix"])
+async def iso2epoch(ctx, *, time):
+    await ctx.send(int(datetime.strptime(time[:-6], "%Y%m%d %H:%M:%S").replace(tzinfo=timezone.utc).timestamp()) - (
+                int(time[-2:]) * 60 + 60 * 60 * int(time[-4:-2]) * int(time[-5:-4] + '1')))
 
 
 @sylveon.command()
