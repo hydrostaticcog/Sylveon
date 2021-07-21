@@ -200,12 +200,12 @@ async def hug(ctx, members: commands.Greedy[discord.Member] = None, *, reason="a
         mentions = " ".join(mentions)
     elif ctx.message.mention_everyone:
         mentions = "@everyone"
-        reason = reason.replace("@everyone", "aww")
+        reason = reason.replace("@everyone", "aww!")
     else:
         mentions = " :D"
     if not sent:
-        reason = reason.replace("@everyone", "aww")
-        reason = reason.replace("@here", "aww")
+        reason = reason.replace("@everyone", "aww!")
+        reason = reason.replace("@here", "aww!")
         await ctx.send(f"{mentions}, {ctx.author.mention} gave you a hug, {reason}")
         hugs = ["https://media.tenor.com/images/50c2f13c590fdb27c087d6a6736218e0/tenor.gif",
                 "https://media.discordapp.net/attachments/731763704005394523/829133807008743444/image0.gif",
@@ -232,12 +232,12 @@ async def snuggle(ctx, members: commands.Greedy[discord.Member] = None, *, reaso
         mentions = " ".join(mentions)
     elif ctx.message.mention_everyone:
         mentions = "@everyone"
-        reason = reason.replace("@everyone", "aww")
+        reason = reason.replace("@everyone", "aww!")
     else:
         mentions = " :D"
     if not sent:
-        reason = reason.replace("@everyone", "aww")
-        reason = reason.replace("@here", "aww")
+        reason = reason.replace("@everyone", "aww!")
+        reason = reason.replace("@here", "aww!")
         await ctx.send(f"{mentions}, {ctx.author.mention} wants to snuggle, {reason}")
         snuggles = ["https://tenor.com/view/rosy-cheeks-mochi-peach-mochi-cat-cute-kitty-peach-cat-gif-16992602",
                     "https://tenor.com/view/pats-cute-cats-love-gif-13979931",
