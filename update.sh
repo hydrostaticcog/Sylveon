@@ -1,3 +1,3 @@
 #!/bin/bash
-git pull
-systemctl restart sylveon.service
+git reset --hard origin/master
+sudo systemctl restart sylveon.service
