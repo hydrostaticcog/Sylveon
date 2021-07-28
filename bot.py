@@ -212,7 +212,8 @@ async def hug(ctx, members: commands.Greedy[discord.Member] = None, *, reason="a
                 "https://media1.tenor.com/images/969f0f462e4b7350da543f0231ba94cb/tenor.gif",
                 "https://media1.tenor.com/images/b7492c8996b25e613a2ab58a5d801924/tenor.gif?itemid=14227401",
                 "https://media1.tenor.com/images/24ac13447f9409d41c1aecb923aedf81/tenor.gif?itemid=5026057",
-                "https://media1.tenor.com/images/f720d87668fa1e65b3294eb30fc4ac36/tenor.gif?itemid=19092449"]
+                "https://media1.tenor.com/images/f720d87668fa1e65b3294eb30fc4ac36/tenor.gif?itemid=19092449",
+                "https://media.tenor.com/images/3f899b5724fe0e21d60857be1c5d03e3/tenor.gif"]
         await ctx.send(random.choice(hugs))
 
 
