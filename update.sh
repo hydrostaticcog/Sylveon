@@ -1,4 +1,5 @@
 #!/bin/bash
+git fetch
 git reset --hard origin/master
 sudo chmod +x bot.py
 sudo chmod +x start.sh
