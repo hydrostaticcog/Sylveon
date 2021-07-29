@@ -40,14 +40,14 @@ async def prefixgetter(_, message) -> str:
 
 
 class Help(commands.HelpCommand):
-    def get_command_signature(self, command):
+    async def get_command_signature(self, command):
         return '%s%s %s' % (await prefixgetter(sylveon, self.context.message), command.qualified_name, command.signature)
 
     async def send_bot_help(self, mapping):
         embed = discord.Embed(title="Help")
         for cog, commands in mapping.items():
             filtered = await self.filter_commands(commands, sort=True)
-            command_signatures = [self.get_command_signature(c) for c in filtered]
+            command_signatures = [await self.get_command_signature(c) for c in filtered]
             if command_signatures:
                 cog_name = getattr(cog, "qualified_name", "Commands")
                 embed.add_field(name=cog_name, value="\n".join(command_signatures), inline=False)
