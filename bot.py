@@ -41,7 +41,7 @@ async def prefixgetter(_, message) -> str:
 
 class Help(commands.HelpCommand):
     def get_command_signature(self, command):
-        return '%s%s %s' % (self.clean_prefix, command.qualified_name, command.signature)
+        return '%s%s %s' % (await prefixgetter(sylveon, self.context.message), command.qualified_name, command.signature)
 
     async def send_bot_help(self, mapping):
         embed = discord.Embed(title="Help")
