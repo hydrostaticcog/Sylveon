@@ -296,7 +296,7 @@ Talking to someone- anyone- that you know won't try to hurt you is important. If
             try:
                 author_dm = await ctx.author.create_dm()
                 await author_dm.send("Unable to send a message to your friend. Links: `You can call 1-800-273-8255 or "
-                                     "go to https://suicidepreventionlifeline.com/chat`. Please go talk to them yourself.")
+                                     "go to https://suicidepreventionlifeline.org/chat`. Please go talk to them yourself.")
             except discord.Forbidden or discord.HTTPException:
                 pass
 
