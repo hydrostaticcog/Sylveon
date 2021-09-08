@@ -6,6 +6,7 @@ import random
 import re
 import traceback
 
+import aiohttp
 import discord
 from discord.ext import commands
 
@@ -24,7 +25,7 @@ with open(path / 'system/token.txt', 'r') as file:
 intents = discord.Intents().none()
 sylveon = commands.Bot(case_insensitive=True, intents=intents,
                        activity=discord.Activity(activity=discord.Game(
-                       name=f"with friends!")))
+                           name=f"with friends!")))
 embedcolor = 0xFD6A02
 
 
@@ -170,6 +171,31 @@ Talking to someone- anyone- that you know won't try to hurt you is important. If
         await ctx.respond(
             "Unable to send a message to the specified user. They are likely a bot.",
             ephemeral=True)
+
+
+@sylveon.slash_command()
+async def xkcd(ctx, id: int = None):
+    async with aiohttp.ClientSession() as session:
+        if isinstance(id, int):
+            async with session.get(f'https://xkcd.com/{id}/info.0.json') as r:
+                if r.status == 200:
+                    js = await r.json()
+                    embed = discord.Embed()
+                    embed.set_image(url=js['img'])
+                    embed.set_footer(text=js['alt'])
+                    await ctx.respond(js['title'], embed=embed)
+                else:
+                    await ctx.respond(f"XKCD returned error code `{r.status}`")
+        else:
+            async with session.get('https://xkcd.com/info.0.json') as r:
+                if r.status == 200:
+                    js = await r.json()
+                    embed = discord.Embed()
+                    embed.set_image(url=js['img'])
+                    embed.set_footer(text=js['alt'])
+                    await ctx.respond(js['title'], embed=embed)
+                else:
+                    await ctx.respond(f"XKCD returned error code `{r.status}`")
 
 
 @sylveon.event
