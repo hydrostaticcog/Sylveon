@@ -146,7 +146,7 @@ async def cuddle(ctx, member: discord.Member = None, reason: str = None):
 
 
 @sylveon.slash_command()
-async def suicide(ctx, person: discord.Member,
+async def antisuicide(ctx, person: discord.Member,
                   message: str = "You are an incredible person who will do incredible things. You deserve the world."):
     """Sends suicide prevention links to the user selected."""
     try:
