@@ -82,14 +82,14 @@ async def hug(ctx, member: discord.Member = None, reason: str = None):
             "https://media1.tenor.com/images/f720d87668fa1e65b3294eb30fc4ac36/tenor.gif?itemid=19092449"]
     embed = discord.Embed()
     embed.set_image(url=random.choice(hugs))
+    if reason is None:
+        reason = "aww!"
     if member is not None:
         if member.id == 808149899182342145:
             await ctx.respond("But that's Glaceon!")
             await ctx.send("https://tenor.com/view/anime-blush-girl-gif-19459906")
             return
         else:
-            if reason is None:
-                reason = "aww!"
             await ctx.respond(f"{member.mention}, {ctx.author.mention} gave you a hug, {reason}", embed=embed)
     else:
         await ctx.respond(f":D, {ctx.author.mention} gave you a hug, {reason}", embed=embed)
@@ -103,6 +103,8 @@ async def snuggle(ctx, member: discord.Member = None, reason: str = None):
                 "https://tenor.com/view/gif-fofinho-heart-love-cuddle-cute-gif-14676815"]
     embed = discord.Embed()
     embed.set_image(url=random.choice(snuggles))
+    if reason is None:
+        reason = "aww!"
     if member is not None:
         if member.id == 808149899182342145:
             await ctx.respond("But that's Glaceon!")
@@ -124,6 +126,8 @@ async def cuddle(ctx, member: discord.Member = None, reason: str = None):
                "https://tenor.com/WdJI.gif"]
     embed = discord.Embed()
     embed.set_image(url=random.choice(cuddles))
+    if reason is None:
+        reason = "aww!"
     if member is not None:
         if member.id == 808149899182342145:
             await ctx.respond("But that's Glaceon!")
