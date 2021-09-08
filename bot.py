@@ -83,16 +83,16 @@ async def hug(ctx, member: discord.Member = None, reason: str = None):
     embed = discord.Embed()
     embed.set_image(url=random.choice(hugs))
     if reason is None:
-        reason = "aww!"
+        reason = "for being a good friend"
     if member is not None:
         if member.id == 808149899182342145:
             await ctx.respond("But that's Glaceon!")
             await ctx.send("https://tenor.com/view/anime-blush-girl-gif-19459906")
             return
         else:
-            await ctx.respond(f"{member.mention}, {ctx.author.mention} gave you a hug, {reason}", embed=embed)
+            await ctx.respond(f"{member.mention}, {ctx.author.mention} gave you a hug {reason}", embed=embed)
     else:
-        await ctx.respond(f":D, {ctx.author.mention} gave you a hug, {reason}", embed=embed)
+        await ctx.respond(f":D, {ctx.author.mention} gave you a hug {reason}", embed=embed)
 
 
 @sylveon.slash_command()
@@ -104,7 +104,7 @@ async def snuggle(ctx, member: discord.Member = None, reason: str = None):
     embed = discord.Embed()
     embed.set_image(url=random.choice(snuggles))
     if reason is None:
-        reason = "aww!"
+        reason = "for being someone awesome"
     if member is not None:
         if member.id == 808149899182342145:
             await ctx.respond("But that's Glaceon!")
@@ -113,9 +113,9 @@ async def snuggle(ctx, member: discord.Member = None, reason: str = None):
         else:
             if reason is None:
                 reason = "aww!"
-            await ctx.respond(f"{member.mention}, {ctx.author.mention} snuggles you, {reason}", embed=embed)
+            await ctx.respond(f"{member.mention}, {ctx.author.mention} snuggles you {reason}", embed=embed)
     else:
-        await ctx.respond(f":D, {ctx.author.mention} snuggles you, {reason}", embed=embed)
+        await ctx.respond(f":D, {ctx.author.mention} snuggles you {reason}", embed=embed)
         await ctx.send(random.choice(snuggles))
 
 
@@ -127,7 +127,7 @@ async def cuddle(ctx, member: discord.Member = None, reason: str = None):
     embed = discord.Embed()
     embed.set_image(url=random.choice(cuddles))
     if reason is None:
-        reason = "aww!"
+        reason = "because they love you"
     if member is not None:
         if member.id == 808149899182342145:
             await ctx.respond("But that's Glaceon!")
@@ -136,9 +136,9 @@ async def cuddle(ctx, member: discord.Member = None, reason: str = None):
         else:
             if reason is None:
                 reason = "aww!"
-            await ctx.respond(f"{member.mention}, {ctx.author.mention} snuggles you, {reason}", embed=embed)
+            await ctx.respond(f"{member.mention}, {ctx.author.mention} cuddles you {reason}", embed=embed)
     else:
-        await ctx.respond(f":D, {ctx.author.mention} snuggles you, {reason}", embed=embed)
+        await ctx.respond(f":D, {ctx.author.mention} cuddles you {reason}", embed=embed)
 
 
 @sylveon.slash_command()
