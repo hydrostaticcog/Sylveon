@@ -21,10 +21,10 @@ async def deping(text) -> str:
 
 with open(path / 'system/token.txt', 'r') as file:
     TOKEN = file.read()
-intents = discord.Intents().all()
+intents = discord.Intents().none()
 sylveon = commands.Bot(case_insensitive=True, intents=intents,
                        activity=discord.Activity(activity=discord.Game(
-                           name=f"with friends!")))
+                       name=f"with friends!")))
 embedcolor = 0xFD6A02
 
 
@@ -122,8 +122,11 @@ async def snuggle(ctx, member: discord.Member = None, reason: str = None):
 @sylveon.slash_command()
 async def cuddle(ctx, member: discord.Member = None, reason: str = None):
     """when you want to cuddle with someone, because you love them"""
-    cuddles = ["https://tenor.com/bgaNg.gif",
-               "https://tenor.com/WdJI.gif"]
+    cuddles = ["https://c.tenor.com/R4NC0rf5RYAAAAAd/couples-love.gif",
+               "https://c.tenor.com/-rW7zgTPkkwAAAAi/hug.gif",
+               "https://c.tenor.com/TsL3G4aPH2wAAAAC/milk-and-mocha-milk.gif",
+               "https://c.tenor.com/X54vC9bzK6MAAAAC/cute-cuddle.gif",
+               "https://c.tenor.com/Aaxuq2evHe8AAAAC/kiss-cute.gif"]
     embed = discord.Embed()
     embed.set_image(url=random.choice(cuddles))
     if reason is None:
