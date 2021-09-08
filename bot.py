@@ -175,6 +175,7 @@ Talking to someone- anyone- that you know won't try to hurt you is important. If
 
 @sylveon.slash_command()
 async def xkcd(ctx, id: int = None):
+    """Get an XKCD by number, or the latest xkcd"""
     async with aiohttp.ClientSession() as session:
         if isinstance(id, int):
             async with session.get(f'https://xkcd.com/{id}/info.0.json') as r:
