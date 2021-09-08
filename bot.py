@@ -158,10 +158,15 @@ Talking to someone- anyone- that you know won't try to hurt you is important. If
 - {ctx.author}, valkyrie_pilot#2707, and smallpepperz#0681.
 """)
         await ctx.respond("Successfully sent your friend the message they needed.", ephemeral=True)
-    except discord.Forbidden or discord.HTTPException:
-        await ctx.respond("Unable to send a message to your friend. Links: `You can call 1-800-273-8255 or "
-                          "go to https://suicidepreventionlifeline.com/chat`. Please go talk to them yourself.",
-                          ephemeral=True)
+    except discord.Forbidden:
+        await ctx.respond(
+            "Unable to send a message to your friend, they might have DMs off or me blocked. You can have them call "
+            "1-800-273-8255 or go to https://suicidepreventionlifeline.com/chat. Please go talk to them yourself.",
+            ephemeral=True)
+    except discord.HTTPException:
+        await ctx.respond(
+            "Unable to send a message to the specified user. They are likely a bot.",
+            ephemeral=True)
 
 
 @sylveon.event
