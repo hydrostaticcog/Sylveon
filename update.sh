@@ -1,3 +1,7 @@
 #!/bin/bash
-git pull
-systemctl restart sylveon.service
+git fetch
+git reset --hard origin/master
+sudo chmod +x bot.py
+sudo chmod +x start.sh
+sudo chmod +x update.sh
+sudo systemctl restart sylveon.service
