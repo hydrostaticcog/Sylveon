@@ -140,7 +140,7 @@ async def cuddle(ctx, member: discord.Member = None, reason: str = None):
 @sylveon.slash_command()
 async def suicide(ctx, person: discord.Member,
                   message: str = "You are an incredible person who will do incredible things. You deserve the world."):
-    """if someone is in danger of hurting themselves, this sends them a link to the Suicide Prevention Hotline."""
+    """Sends suicide prevention links to the user selected."""
     try:
         member_direct_message = await person.create_dm()
         await member_direct_message.send(f"""Suicide is never the answer.
