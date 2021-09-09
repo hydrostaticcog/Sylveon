@@ -239,9 +239,6 @@ async def deisolate():
         await user.create_dm().send("Removed your isolation in MDSP")
 
 
-deisolate.start()
-
-
 @sylveon.event
 async def on_command_error(ctx, error):
     if hasattr(ctx.command, 'on_error'):
