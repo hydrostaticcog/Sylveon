@@ -222,20 +222,19 @@ async def isolate(ctx, hours: int):
         await cur.execute("CREATE TABLE IF NOT EXISTS isolated(user_id BIGINT, unmute_when BIGINT)")
         await cur.execute("INSERT INTO isolated (?,?)",
                           (ctx.author.id, datetime.datetime.utcnow().timestamp() + hours))
-    await ctx.respond("Adding isolated role...")
+        await ctx.respond("Adding isolated role...")
 
 
 @tasks.loop(seconds=10)
 async def deisolate():
-    async wit aiosqlite.connect(path / "system/data.db") as db:
+    async with aiosqlite.connect(path / "system/data.db") as db:
         cur = await db.cursor()
         userid = await cur.fetchone("SELECT user_id FROM isolated WHERE unmute_when < ?",
                                     (datetime.datetime.utcnow().timestamp(),))
         await cur.execute("DELETE FROM isolated WHERE user_id = ?", (userid,))
         guild = sylveon.get_guild(764981968579461130)
         user = guild.get_member(userid[0])
-        await user.remove_roles(
-            guild.get_role(845389619842383892))
+        await user.remove_roles(guild.get_role(845389619842383892))
         await user.create_dm().send("Removed your isolation in MDSP")
 
 
