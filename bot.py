@@ -220,7 +220,7 @@ async def isolate(ctx, hours: int):
     async with aiosqlite.connect(path / "system/data.db") as db:
         cur = await db.cursor()
         await cur.execute("CREATE TABLE IF NOT EXISTS isolated(user_id BIGINT, unmute_when BIGINT)")
-        await cur.execute("INSERT INTO isolated (%s,%s)",
+        await cur.execute("INSERT INTO isolated VALUES (%s,%s)",
                           (ctx.author.id, datetime.datetime.utcnow().timestamp() + hours))
         await ctx.respond("Adding isolated role...")
 
