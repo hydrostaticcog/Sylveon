@@ -7,6 +7,7 @@ import re
 import traceback
 
 import aiohttp
+import catapi
 import discord
 from discord.ext import commands
 
@@ -147,7 +148,7 @@ async def cuddle(ctx, member: discord.Member = None, reason: str = None):
 
 @sylveon.slash_command()
 async def antisuicide(ctx, person: discord.Member,
-                  message: str = "You are an incredible person who will do incredible things. You deserve the world."):
+                      message: str = "You are an incredible person who will do incredible things. You deserve the world."):
     """Sends suicide prevention links to the user selected."""
     try:
         member_direct_message = await person.create_dm()
@@ -197,6 +198,19 @@ async def xkcd(ctx, number: int = None):
                     await ctx.respond(js['title'], embed=embed)
                 else:
                     await ctx.respond(f"XKCD returned error code `{r.status}`")
+
+
+@sylveon.slash_command()
+async def pussy(ctx):
+    """see a pussy"""
+
+    # Initialize the api
+    api = catapi.CatApi(api_key="09d041b3-535f-41fb-bb68-7991a79d44be")
+
+    results = await api.search_images(limit=1)
+    embed = discord.Embed()
+    embed.set_image(url=results[0].url)
+    await ctx.respond("What did you *think* you were going to see?", embed=embed)
 
 
 @sylveon.event
