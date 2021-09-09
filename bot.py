@@ -174,14 +174,14 @@ Talking to someone- anyone- that you know won't try to hurt you is important. If
 
 
 @sylveon.slash_command()
-async def xkcd(ctx, id: int = None):
+async def xkcd(ctx, number: int = None):
     """Get an XKCD by number, or the latest xkcd"""
     async with aiohttp.ClientSession() as session:
         if isinstance(id, int):
-            async with session.get(f'https://xkcd.com/{id}/info.0.json') as r:
+            async with session.get(f'https://xkcd.com/{number}/info.0.json') as r:
                 if r.status == 200:
                     js = await r.json()
-                    embed = discord.Embed()
+                    embed = discord.Embed(description=f"[XKCD #{js['num']}](https://xkcd.com/{js['num']})")
                     embed.set_image(url=js['img'])
                     embed.set_footer(text=js['alt'])
                     await ctx.respond(js['title'], embed=embed)
@@ -191,7 +191,7 @@ async def xkcd(ctx, id: int = None):
             async with session.get('https://xkcd.com/info.0.json') as r:
                 if r.status == 200:
                     js = await r.json()
-                    embed = discord.Embed()
+                    embed = discord.Embed(description=f"[XKCD #{js['num']}](https://xkcd.com/{js['num']})")
                     embed.set_image(url=js['img'])
                     embed.set_footer(text=js['alt'])
                     await ctx.respond(js['title'], embed=embed)
