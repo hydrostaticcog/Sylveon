@@ -1,15 +1,17 @@
 #!venv/bin/python3
 import base64
 import binascii
+import datetime
 import pathlib
 import random
 import re
 import traceback
 
 import aiohttp
+import aiosqlite
 import catapi
 import discord
-from discord.ext import commands
+from discord.ext import commands, tasks
 
 path = pathlib.Path()
 
@@ -211,6 +213,33 @@ async def pussy(ctx):
     embed = discord.Embed()
     embed.set_image(url=results[0].url)
     await ctx.respond("What did you *think* you were going to see?", embed=embed)
+
+
+@sylveon.slash_command(guild_ids=[764981968579461130])
+async def isolate(ctx, hours: int):
+    async with await aiosqlite.connect(path / "system/data.db") as db:
+        cur = await db.cursor()
+        await cur.execute("CREATE TABLE IF NOT EXISTS isolated(user_id BIGINT, unmute_when BIGINT)")
+        await cur.execute("INSERT INTO isolated (?,?)",
+                          (ctx.author.id, datetime.datetime.utcnow().timestamp() + hours * 3600))
+    await ctx.respond("Adding isolated role...")
+
+
+@tasks.loop(seconds=10)
+async def deisolate():
+    async with await aiosqlite.connect(path / "system/data.db") as db:
+        cur = await db.cursor()
+        userid = await cur.fetchone("SELECT user_id FROM isolated WHERE unmute_when < ?",
+                                    (datetime.datetime.utcnow().timestamp(),))
+        await cur.execute("DELETE FROM isolated WHERE user_id = ?", (userid,))
+        guild = sylveon.get_guild(764981968579461130)
+        user = guild.get_member(userid[0])
+        await user.remove_roles(
+            guild.get_role(845389619842383892))
+        await user.create_dm().send("Removed your isolation in MDSP")
+
+
+deisolate.start()
 
 
 @sylveon.event

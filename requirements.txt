@@ -1,3 +1,4 @@
 catapi.py
 git+https://github.com/Pycord-Development/pycord
 aiohttp
+aiosqlite
