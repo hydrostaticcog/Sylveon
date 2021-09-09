@@ -217,7 +217,7 @@ async def pussy(ctx):
 
 @sylveon.slash_command(guild_ids=[764981968579461130])
 async def isolate(ctx, hours: int):
-    async with await aiosqlite.connect(path / "system/data.db") as db:
+    async with aiosqlite.connect(path / "system/data.db") as db:
         cur = await db.cursor()
         await cur.execute("CREATE TABLE IF NOT EXISTS isolated(user_id BIGINT, unmute_when BIGINT)")
         await cur.execute("INSERT INTO isolated (?,?)",
