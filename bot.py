@@ -224,7 +224,8 @@ async def isolate(ctx, hours: int):
                           (ctx.author.id, datetime.datetime.utcnow().timestamp() + hours,))
         await db.commit()
         guild = sylveon.get_guild(764981968579461130)
-        await ctx.author.add_roles(guild.get_role(845389619842383892))
+        isolated_role = guild.get_role(845389619842383892)
+        await ctx.author.add_roles(isolated_role)
         await ctx.respond("Adding isolated role...")
 
 
@@ -238,7 +239,8 @@ async def deisolate():
         await db.commit()
         guild = sylveon.get_guild(764981968579461130)
         user = guild.get_member(userid[0])
-        await user.remove_roles(guild.get_role(845389619842383892))
+        isolated_role = guild.get_role(845389619842383892)
+        await user.remove_roles(isolated_role)
         await user.create_dm().send("Removed your isolation in MDSP")
 
 
