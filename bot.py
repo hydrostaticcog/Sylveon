@@ -227,7 +227,7 @@ async def isolate(ctx, hours: int):
 
 @tasks.loop(seconds=10)
 async def deisolate():
-    async with await aiosqlite.connect(path / "system/data.db") as db:
+    async wit aiosqlite.connect(path / "system/data.db") as db:
         cur = await db.cursor()
         userid = await cur.fetchone("SELECT user_id FROM isolated WHERE unmute_when < ?",
                                     (datetime.datetime.utcnow().timestamp(),))
