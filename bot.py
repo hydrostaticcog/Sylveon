@@ -221,7 +221,7 @@ async def isolate(ctx, hours: int):
         cur = await db.cursor()
         await cur.execute("CREATE TABLE IF NOT EXISTS isolated(user_id BIGINT, unmute_when BIGINT)")
         await cur.execute("INSERT INTO isolated (?,?)",
-                          (ctx.author.id, datetime.datetime.utcnow().timestamp() + hours * 3600))
+                          (ctx.author.id, datetime.datetime.utcnow().timestamp() + hours))
     await ctx.respond("Adding isolated role...")
 
 
