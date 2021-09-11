@@ -214,9 +214,11 @@ async def pussy(ctx):
 
 
 @sylveon.slash_command(guild_ids=[885704807879438336])
-async def clear(ctx, count: int):
+async def clear(ctx, count: int, hastext: str = None):
     """Clear messages"""
-    await ctx.channel.purge(limit=count)
+    def kwcheck():
+        return hastext in ctx.message.content
+    await ctx.channel.purge(limit=count, check=kwcheck)
     await ctx.respond("Purged {count} messages")
 
 
