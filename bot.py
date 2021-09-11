@@ -1,17 +1,15 @@
 #!venv/bin/python3
 import base64
 import binascii
-import datetime
 import pathlib
 import random
 import re
 import traceback
 
 import aiohttp
-import aiosqlite
 import catapi
 import discord
-from discord.ext import commands, tasks
+from discord.ext import commands
 
 path = pathlib.Path()
 
@@ -215,6 +213,13 @@ async def pussy(ctx):
     await ctx.respond("What did you *think* you were going to see?", embed=embed)
 
 
+@sylveon.slash_command(guild_ids=[885704807879438336])
+async def clear(ctx, count: int):
+    """Clear messages"""
+    await ctx.channel.purge(limit=count)
+    await ctx.respond("Purged {count} messages")
+
+
 @sylveon.event
 async def on_command_error(ctx, error):
     if hasattr(ctx.command, 'on_error'):
@@ -225,31 +230,31 @@ async def on_command_error(ctx, error):
         return
 
     elif isinstance(error, discord.ext.commands.errors.NotOwner):
-        await ctx.reply("lol only valk can do that")
+        await ctx.respond("lol only valk can do that", ephemeral=True)
         return
 
     elif isinstance(error, discord.ext.commands.errors.MissingPermissions):
-        await ctx.reply("You are not allowed to do that!")
+        await ctx.respond("You are not allowed to do that!", ephemeral=True)
         return
 
     elif isinstance(error, discord.ext.commands.errors.BotMissingPermissions):
-        await ctx.reply("I do not have the requisite permissions to do that!")
+        await ctx.respond("I do not have the requisite permissions to do that!", ephemeral=True)
         return
 
     elif isinstance(error, discord.ext.commands.errors.MissingRole):
-        await ctx.send("I am missing the role to do that!")
+        await ctx.respond("I am missing the role to do that!", ephemeral=True)
         return
 
     elif isinstance(error, discord.ext.commands.errors.MissingRequiredArgument):
-        await ctx.reply(f"Missing required argument!\nUsage:`{ctx.command.signature}`", delete_after=30)
+        await ctx.respond(f"Missing required argument!\nUsage:`{ctx.command.signature}`", ephemeral=True)
         return
 
     elif isinstance(error, discord.ext.commands.errors.BadArgument):
-        await ctx.reply(f"Invalid argument!\nUsage:`{ctx.command.signature}`", delete_after=30)
+        await ctx.respond(f"Invalid argument!\nUsage:`{ctx.command.signature}`", ephemeral=True)
         return
 
     elif isinstance(error, discord.ext.commands.errors.NoPrivateMessage):
-        await ctx.reply("That can only be used in servers, not DMs!")
+        await ctx.respond("That can only be used in servers, not DMs!", ephemeral=True)
         return
 
     else:
