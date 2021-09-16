@@ -101,9 +101,9 @@ async def hug(ctx, member: discord.Member = None, reason: str = None):
 @sylveon.slash_command()
 async def snuggle(ctx, member: discord.Member = None, reason: str = None):
     """Gives someone a snuggle :D"""
-    snuggles = ["https://tenor.com/view/rosy-cheeks-mochi-peach-mochi-cat-cute-kitty-peach-cat-gif-16992602",
-                "https://tenor.com/view/pats-cute-cats-love-gif-13979931",
-                "https://tenor.com/view/gif-fofinho-heart-love-cuddle-cute-gif-14676815"]
+    snuggles = ["https://c.tenor.com/eJkT33i-NcUAAAAC/rosy-cheeks-mochi-peach.gif",
+                "https://c.tenor.com/aiC-Lw9RBjkAAAAC/pats-cute.gif",
+                "https://c.tenor.com/5VbS6pyBYvsAAAAC/gif-fofinho-heart.gif"]
     embed = discord.Embed()
     embed.set_image(url=random.choice(snuggles))
     if reason is None:
