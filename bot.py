@@ -311,4 +311,4 @@ async def pussy(ctx):
     await ctx.respond("What did you *think* you were going to see?", embed=embed)
 
 
-sylveon.run(os.getenv('token'))
+sylveon.run(os.getenv('TOKEN'))
