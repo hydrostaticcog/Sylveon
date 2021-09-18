@@ -100,7 +100,8 @@ async def hug(ctx,
             "https://media1.tenor.com/images/969f0f462e4b7350da543f0231ba94cb/tenor.gif",
             "https://media1.tenor.com/images/b7492c8996b25e613a2ab58a5d801924/tenor.gif?itemid=14227401",
             "https://media1.tenor.com/images/24ac13447f9409d41c1aecb923aedf81/tenor.gif?itemid=5026057",
-            "https://media1.tenor.com/images/f720d87668fa1e65b3294eb30fc4ac36/tenor.gif?itemid=19092449"]
+            "https://media1.tenor.com/images/f720d87668fa1e65b3294eb30fc4ac36/tenor.gif?itemid=19092449",
+            "https://c.tenor.com/xIuXbMtA38sAAAAd/toilet-bound-hanakokun.gif"]
     embed = discord.Embed()
     embed.set_image(url=random.choice(hugs))
     if reason is None:
@@ -121,9 +122,9 @@ async def snuggle(ctx,
                   member: discord.app.Option(discord.Member, 'Member you want to snuggle', required=False) = None,
                   reason: discord.app.Option(str, 'Reason for snuggles', required=False) = None):
     """Gives someone a snuggle :D"""
-    snuggles = ["https://tenor.com/view/rosy-cheeks-mochi-peach-mochi-cat-cute-kitty-peach-cat-gif-16992602",
-                "https://tenor.com/view/pats-cute-cats-love-gif-13979931",
-                "https://tenor.com/view/gif-fofinho-heart-love-cuddle-cute-gif-14676815"]
+    snuggles = ["https://c.tenor.com/eJkT33i-NcUAAAAC/rosy-cheeks-mochi-peach.gif",
+                "https://c.tenor.com/aiC-Lw9RBjkAAAAC/pats-cute.gif",
+                "https://c.tenor.com/5VbS6pyBYvsAAAAC/gif-fofinho-heart.gif"]
     embed = discord.Embed()
     embed.set_image(url=random.choice(snuggles))
     if reason is None:
