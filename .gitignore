@@ -2,3 +2,5 @@
 **/system
 **/.idea
 *.log
+.env
+**/.sylveoncache

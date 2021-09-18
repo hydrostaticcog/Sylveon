@@ -1,17 +1,28 @@
 #!venv/bin/python3
+import asyncio
 import base64
 import binascii
+import os
 import pathlib
 import random
 import re
-import traceback
 
 import aiohttp
+import aiomysql
 import catapi
 import discord
-from discord.ext import commands
+from discord.ext import commands, tasks
+from dotenv import load_dotenv
 
 path = pathlib.Path()
+load_dotenv()
+
+sql = asyncio.get_event_loop().run_until_complete(
+    aiomysql.create_pool(host=os.getenv('SQLserverhost'),
+                         user=os.getenv('SQLusername'),
+                         password=os.getenv('SQLpassword'),
+                         db=os.getenv('SQLdatabase'),
+                         autocommit=True))
 
 
 async def deping(text) -> str:
@@ -21,9 +32,7 @@ async def deping(text) -> str:
     return text
 
 
-with open(path / 'system/token.txt', 'r') as file:
-    TOKEN = file.read()
-intents = discord.Intents().none()
+intents = discord.Intents(members=True, guilds=True)
 sylveon = commands.Bot(case_insensitive=True, intents=intents,
                        activity=discord.Activity(activity=discord.Game(
                            name=f"with friends!")))
@@ -31,9 +40,15 @@ embedcolor = 0xFD6A02
 
 
 @sylveon.slash_command()
-async def hello(ctx):
+async def hello(ctx,
+                member: discord.app.Option(discord.Member, 'Member to say hello to', required=False) = None):
     """o/"""
-    await ctx.respond('https://tenor.com/view/hello-there-hi-there-greetings-gif-9442662')
+    if isinstance(member, discord.Member):
+        embed = discord.Embed()
+        embed.set_image(url='https://c.tenor.com/6us3et_6HDoAAAAC/hello-there-hi-there.gif')
+        await ctx.respond(f'Welcome {member.mention}!', embed=embed)
+    else:
+        await ctx.respond('https://tenor.com/view/hello-there-hi-there-greetings-gif-9442662')
 
 
 @sylveon.slash_command()
@@ -46,7 +61,8 @@ async def ping(ctx):
 
 
 @sylveon.slash_command()
-async def base64encode(ctx, string: str):
+async def base64encode(ctx,
+                       string: discord.app.Option(str, 'String to convert from base64 to ascii')):
     """Encode a string to Base64"""
     try:
         b64_encoded_string = base64.b64encode(string.encode()).decode()
@@ -60,7 +76,8 @@ async def base64encode(ctx, string: str):
 
 
 @sylveon.slash_command()
-async def base64decode(ctx, string: str):
+async def base64decode(ctx,
+                       string: discord.app.Option(str, 'String to convert to ascii from base64')):
     """Decode a string from Base64"""
     try:
         b64_encoded_string = base64.b64decode(string.encode()).decode()
@@ -74,7 +91,9 @@ async def base64decode(ctx, string: str):
 
 
 @sylveon.slash_command()
-async def hug(ctx, member: discord.Member = None, reason: str = None):
+async def hug(ctx,
+              member: discord.app.Option(discord.Member, 'Member you want to hug', required=False) = None,
+              reason: discord.app.Option(str, 'Reason for hugs', required=False) = None):
     """Gives someone a hug :D"""
     hugs = ["https://media.tenor.com/images/50c2f13c590fdb27c087d6a6736218e0/tenor.gif",
             "https://media.discordapp.net/attachments/731763704005394523/829133807008743444/image0.gif",
@@ -92,13 +111,15 @@ async def hug(ctx, member: discord.Member = None, reason: str = None):
             await ctx.send("https://tenor.com/view/anime-blush-girl-gif-19459906")
             return
         else:
-            await ctx.respond(f"{member.mention}, {ctx.author.mention} gave you a hug {reason}", embed=embed)
+            await ctx.respond(f"{member.mention}, {ctx.author.mention} gave you a hug, {reason}", embed=embed)
     else:
-        await ctx.respond(f":D, {ctx.author.mention} gave you a hug {reason}", embed=embed)
+        await ctx.respond(f":D, {ctx.author.mention} gave you a hug, {reason}", embed=embed)
 
 
 @sylveon.slash_command()
-async def snuggle(ctx, member: discord.Member = None, reason: str = None):
+async def snuggle(ctx,
+                  member: discord.app.Option(discord.Member, 'Member you want to snuggle', required=False) = None,
+                  reason: discord.app.Option(str, 'Reason for snuggles', required=False) = None):
     """Gives someone a snuggle :D"""
     snuggles = ["https://tenor.com/view/rosy-cheeks-mochi-peach-mochi-cat-cute-kitty-peach-cat-gif-16992602",
                 "https://tenor.com/view/pats-cute-cats-love-gif-13979931",
@@ -115,14 +136,16 @@ async def snuggle(ctx, member: discord.Member = None, reason: str = None):
         else:
             if reason is None:
                 reason = "aww!"
-            await ctx.respond(f"{member.mention}, {ctx.author.mention} snuggles you {reason}", embed=embed)
+            await ctx.respond(f"{member.mention}, {ctx.author.mention} snuggles you, {reason}", embed=embed)
     else:
-        await ctx.respond(f":D, {ctx.author.mention} snuggles you {reason}", embed=embed)
+        await ctx.respond(f":D, {ctx.author.mention} snuggles you, {reason}", embed=embed)
         await ctx.send(random.choice(snuggles))
 
 
 @sylveon.slash_command()
-async def cuddle(ctx, member: discord.Member = None, reason: str = None):
+async def cuddle(ctx,
+                 member: discord.app.Option(discord.Member, 'Member you want to cuddle', required=False) = None,
+                 reason: discord.app.Option(str, 'Reason for cuddles', required=False) = None):
     """when you want to cuddle with someone, because you love them"""
     cuddles = ["https://c.tenor.com/R4NC0rf5RYAAAAAd/couples-love.gif",
                "https://c.tenor.com/-rW7zgTPkkwAAAAi/hug.gif",
@@ -141,14 +164,17 @@ async def cuddle(ctx, member: discord.Member = None, reason: str = None):
         else:
             if reason is None:
                 reason = "aww!"
-            await ctx.respond(f"{member.mention}, {ctx.author.mention} cuddles you {reason}", embed=embed)
+            await ctx.respond(f"{member.mention}, {ctx.author.mention} cuddles you, {reason}", embed=embed)
     else:
-        await ctx.respond(f":D, {ctx.author.mention} cuddles you {reason}", embed=embed)
+        await ctx.respond(f":D, {ctx.author.mention} cuddles you, {reason}", embed=embed)
 
 
 @sylveon.slash_command()
-async def antisuicide(ctx, person: discord.Member,
-                      message: str = "You are an incredible person who will do incredible things. You deserve the world."):
+async def antisuicide(ctx,
+                      person: discord.app.Option(discord.Member, 'Member to send the anti-suicide message to'),
+                      message: discord.app.Option(str,
+                                                  'Custom message that will be inserted into the default message',
+                                                  required=False) = "You are an incredible person who will do incredible things. You deserve the world."):
     """Sends suicide prevention links to the user selected."""
     try:
         member_direct_message = await person.create_dm()
@@ -174,8 +200,49 @@ Talking to someone- anyone- that you know won't try to hurt you is important. If
             ephemeral=True)
 
 
-@sylveon.slash_command()
-async def xkcd(ctx, number: int = None):
+xkcd = sylveon.command_group(
+    "xkcd", "xkcd-related commands"
+)
+
+
+@xkcd.command(name="setup")
+async def xkcd_setup(ctx,
+                     channel: discord.app.Option(discord.abc.GuildChannel,
+                                                 'Text channel to send XKCD notifications to'),
+                     pingrole: discord.app.Option(discord.Role, 'Role to mention when an XKCD comes out',
+                                                  required=False)):
+    """Set the channel to receive updates when a new XKCD releases"""
+    if ctx.author.guild_permissions.manage_channels:
+        if isinstance(channel, discord.TextChannel):
+            async with await sql.acquire() as conn:
+                async with await conn.cursor() as cur:
+                    await cur.execute("""DELETE FROM xkcd WHERE guild = (%s)""", (ctx.guild.id,))
+                    if isinstance(pingrole, discord.Role):
+                        await cur.execute("""INSERT INTO xkcd VALUES (%s, %s, %s)""",
+                                          (ctx.guild.id, channel.id, pingrole.id,))
+                    else:
+                        await cur.execute("""INSERT INTO xkcd VALUES (%s, %s, NULL)""", (ctx.guild.id, channel.id,))
+                    await ctx.respond("XKCD notifier set up successfully!", ephemeral=True)
+        else:
+            await ctx.respond(
+                "Please use a text channel, discord doesn't give a way to specify that your selection must be a text channel.",
+                ephemeral=True)
+    else:
+        await ctx.respond("You must have the `manage channels` permission to use that command.", ephemeral=True)
+
+
+@xkcd.command(name="disable")
+async def xkcd_disable(ctx):
+    """Disables the XKCD release notifier."""
+    async with await sql.acquire() as conn:
+        async with await conn.cursor() as cur:
+            await cur.execute("""DELETE FROM xkcd WHERE guild = %s""", (ctx.guild.id,))
+    await ctx.respond("Removed this guild from those subscribed to XKCD", ephemeral=True)
+
+
+@xkcd.command()
+async def get(ctx,
+              number: discord.app.Option(int, 'XKCD comic number to fetch', required=False) = None):
     """Get an XKCD by number, or the latest xkcd"""
     async with aiohttp.ClientSession() as session:
         if isinstance(number, int):
@@ -200,12 +267,42 @@ async def xkcd(ctx, number: int = None):
                     await ctx.respond(f"XKCD returned error code `{r.status}`")
 
 
+@tasks.loop(minutes=1)
+async def read_xkcd_com():
+    async with aiohttp.ClientSession() as session:
+        async with session.get('https://xkcd.com/info.0.json') as r:
+            if r.status == 200:
+                with open(path / ".sylveoncache/latestxkcd", "r") as cache:
+                    if cache.read() == await r.text():
+                        return
+                js = await r.json()
+                embed = discord.Embed(description=f"[XKCD #{js['num']}](https://xkcd.com/{js['num']})")
+                embed.set_image(url=js['img'])
+                embed.set_footer(text=js['alt'])
+                async with await sql.acquire() as conn:
+                    async with await conn.cursor() as cur:
+                        await cur.execute("""SELECT channel, role_to_ping FROM xkcd""")
+                        channels = await cur.fetchall()
+                        for channel in channels:
+                            send_to = await sylveon.fetch_channel(channel[0])
+                            if isinstance(channel[1], int):
+                                await send_to.send(f"A new XKCD is out!\n\n <@&{channel[1]}>", embed=embed)
+                            else:
+                                await send_to.send(f"A new XKCD is out!", embed=embed)
+                            await asyncio.sleep(2)
+                with open(path / ".sylveoncache/latestxkcd", "w+") as cache:
+                    cache.write(await r.text())
+
+
+read_xkcd_com.start()
+
+
 @sylveon.slash_command()
 async def pussy(ctx):
     """see a pussy"""
 
     # Initialize the api
-    api = catapi.CatApi(api_key="09d041b3-535f-41fb-bb68-7991a79d44be")
+    api = catapi.CatApi(api_key=os.getenv('catapikey'))
 
     results = await api.search_images(limit=1)
     embed = discord.Embed()
@@ -213,71 +310,4 @@ async def pussy(ctx):
     await ctx.respond("What did you *think* you were going to see?", embed=embed)
 
 
-@sylveon.slash_command(guild_ids=[885704807879438336])
-async def clear(ctx, count: int, hastext: str = None):
-    """Clear messages"""
-    def kwcheck():
-        return hastext in ctx.message.content
-    await ctx.channel.purge(limit=count, check=kwcheck)
-    await ctx.respond("Purged {count} messages")
-
-
-@sylveon.event
-async def on_command_error(ctx, error):
-    if hasattr(ctx.command, 'on_error'):
-        # await ctx.message.add_reaction('<:CommandError:804193351758381086>')
-        return
-
-    elif isinstance(error, discord.ext.commands.errors.CommandNotFound) or ctx.command.hidden:
-        return
-
-    elif isinstance(error, discord.ext.commands.errors.NotOwner):
-        await ctx.respond("lol only valk can do that", ephemeral=True)
-        return
-
-    elif isinstance(error, discord.ext.commands.errors.MissingPermissions):
-        await ctx.respond("You are not allowed to do that!", ephemeral=True)
-        return
-
-    elif isinstance(error, discord.ext.commands.errors.BotMissingPermissions):
-        await ctx.respond("I do not have the requisite permissions to do that!", ephemeral=True)
-        return
-
-    elif isinstance(error, discord.ext.commands.errors.MissingRole):
-        await ctx.respond("I am missing the role to do that!", ephemeral=True)
-        return
-
-    elif isinstance(error, discord.ext.commands.errors.MissingRequiredArgument):
-        await ctx.respond(f"Missing required argument!\nUsage:`{ctx.command.signature}`", ephemeral=True)
-        return
-
-    elif isinstance(error, discord.ext.commands.errors.BadArgument):
-        await ctx.respond(f"Invalid argument!\nUsage:`{ctx.command.signature}`", ephemeral=True)
-        return
-
-    elif isinstance(error, discord.ext.commands.errors.NoPrivateMessage):
-        await ctx.respond("That can only be used in servers, not DMs!", ephemeral=True)
-        return
-
-    else:
-        # Send user a message
-        # get data from exception
-        etype = type(error)
-        trace = error.__traceback__
-
-        # 'traceback' is the stdlib module, `import traceback`.
-        lines = traceback.format_exception(etype, error, trace)
-
-        # format_exception returns a list with line breaks embedded in the lines, so let's just stitch the elements
-        # together
-        traceback_text = ''.join(lines)
-
-        # now we can send it to the user
-        bug_channel = sylveon.get_channel(845453425722261515)
-        await bug_channel.send("```\n" + str(traceback_text) + "\n```\n Command being invoked: " + ctx.command.name)
-        await ctx.send("Error!\n```" + str(
-            error) + "```\nvalkyrie_pilot will be informed.  Most likely this is a bug, but check your syntax.",
-                       delete_after=30)
-
-
-sylveon.run(TOKEN)
+sylveon.run(os.getenv('token'))

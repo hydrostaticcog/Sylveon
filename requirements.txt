@@ -1,4 +1,7 @@
 catapi.py
-git+https://github.com/Pycord-Development/pycord
+git+https://github.com/Pycord-Development/pycord.git@feature/slash
 aiohttp
-aiosqlite
+python-dotenv
+aiomysql
+cryptography
+feedparser
