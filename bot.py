@@ -140,7 +140,6 @@ async def snuggle(ctx,
             await ctx.respond(f"{member.mention}, {ctx.author.mention} snuggles you, {reason}", embed=embed)
     else:
         await ctx.respond(f":D, {ctx.author.mention} snuggles you, {reason}", embed=embed)
-        await ctx.send(random.choice(snuggles))
 
 
 @sylveon.slash_command()
